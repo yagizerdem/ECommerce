@@ -1,3 +1,5 @@
+using IOC;
+
 namespace ECommerce
 {
     public class Program
@@ -8,6 +10,9 @@ namespace ECommerce
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // register services from IOC tier
+            Services.Register(builder.Services);
 
             var app = builder.Build();
 
@@ -23,7 +28,7 @@ namespace ECommerce
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
