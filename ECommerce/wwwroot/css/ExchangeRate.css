@@ -1,0 +1,10 @@
+﻿.splide__slide {
+    text-align: center !important;
+}
+
+.presentation, .splide__pagination__page {
+    position: relative;
+    top: 25px;
+    background: gray !important;
+    /* display: none !important; */
+}
