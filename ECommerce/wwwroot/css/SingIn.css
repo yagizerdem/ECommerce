@@ -1,0 +1,68 @@
+﻿.sigin-card {
+    width: 500px;
+    height: 500px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    position: relative;
+    left: 50%;
+    margin-top:100px;
+    margin-left: -250px;
+    border-radius: 20px;
+}
+.sigin-card-header {
+    text-align: center;
+}
+
+.center {
+    width: 400px;
+    height: 400px;
+    position: absolute;
+    top: calc(50% + 20px);
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.r1 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.row_ {
+    text-align: center;
+    margin: 10px auto 30px auto;
+}
+
+.r4 {
+    text-align: left !important;
+    margin-bottom: 10px !important;
+}
+
+.google, .facebook {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: wheat;
+}
+
+.r5 > .circle {
+    display: inline-block !important;
+    cursor: pointer !important;
+}
+
+.submit-btn {
+    width: 200px !important;
+    display: block !important;
+    margin: auto !important;
+    height: 30px !important;
+    text-align: center !important;
+    line-height: 30px !important;
+}
+hr{
+    height:3px !important;
+    background:black !important;
+}
+.r5 > hr {
+    width: 300px !important;
+    margin: 5px auto 0 auto !important;
+}
