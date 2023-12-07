@@ -10,6 +10,11 @@ namespace Entity.EntityClass
 {
     public class AppUser : IdentityUser<string>
     {
+        public AppUser()
+    : base()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
         [Key]
         public string Id { get; set; }
 

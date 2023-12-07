@@ -66,3 +66,14 @@ hr{
     width: 300px !important;
     margin: 5px auto 0 auto !important;
 }
+.validation-summary-errors {
+    margin: 10px auto 10px auto;
+    display: block;
+    text-align: center;
+}
+    .validation-summary-errors > ul {
+        list-style: none;
+    }
+        .validation-summary-errors > ul > li {
+            color: red;
+        }
