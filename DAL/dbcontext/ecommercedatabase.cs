@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Entity.EntityClass;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 namespace DAL.dbcontext
 {
     public class ecommercedatabase : IdentityDbContext<AppUser , IdentityRole, string>
@@ -14,6 +15,12 @@ namespace DAL.dbcontext
         public ecommercedatabase(DbContextOptions<ecommercedatabase> options) : base(options)
         {
         }
+
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Card> Cards { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Shipper> Shippers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
