@@ -1,4 +1,6 @@
-﻿using DAL.dbcontext;
+﻿using AutoMapper;
+using DAL.dbcontext;
+using Entity.AutoMapperProfile;
 using Entity.EntityClass;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,10 +19,18 @@ namespace IOC
         public static void Register(IServiceCollection services)
         {
             services.AddDbContext<ecommercedatabase>(
-             options => options.UseSqlServer("Server=.;Database=bookecommerce;Trusted_Connection=True;TrustServerCertificate=True;", x => x.MigrationsAssembly("DAL")));
+                options => options.UseSqlServer("Server=.;Database=bookecommerce;Trusted_Connection=True;TrustServerCertificate=True;", x => x.MigrationsAssembly("DAL")));
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<ecommercedatabase>()
                 .AddDefaultTokenProviders();
+
+            // automapper
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
     }

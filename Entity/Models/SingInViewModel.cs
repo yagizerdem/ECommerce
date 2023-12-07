@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entity.Models
 {
-    class SingInViewModel
+    public class SingInViewModel
     {
         [Required]
         [MinLength(3, ErrorMessage = "Longer First Name required")]
@@ -21,7 +21,7 @@ namespace Entity.Models
         [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
         public string Email { get; set; }
         [Required]
-        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,}$" , ErrorMessage ="Stronger password required")]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessage = "Stronger password required")]
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }

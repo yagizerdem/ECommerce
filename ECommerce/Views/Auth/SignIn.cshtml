@@ -1,21 +1,22 @@
-﻿<form method="post" asp-action="SingIn">
+﻿@model SingInViewModel
+<form method="post" asp-action="SingIn">
     <div class="sigin-card">
         <h3 class="sigin-card-header">Singn In</h3>
         <hr>
         <div class="center">
             <div class="row__ r1">
-                <input type="text" placeholder="first name">
-                <input type="text" placeholder="last name">
+                <input type="text" placeholder="first name" asp-for="@Model.FirstName">
+                <input type="text" placeholder="last name" asp-for="@Model.LastName">
             </div>
             <div class="row_ r2">
-                <input type="text" placeholder="email">
+                <input type="text" placeholder="email" asp-for="@Model.Email">
             </div>
             <div class="row_ r3">
-                <input type="password" placeholder="password">
+                <input type="password" placeholder="password" asp-for="@Model.Password">
             </div>
             <div class="row_ r3">
-                <label>Remember me</label>
-                <input type="checkbox">
+                <label asp-for="@Model.RememberMe">Remember me</label>
+                <input type="checkbox" asp-for="@Model.RememberMe">
             </div>
             <button class="submit-btn uk-button uk-button-primary" type="submit">SingIn</button>
             <div class="row_ r4">
