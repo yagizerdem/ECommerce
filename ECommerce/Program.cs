@@ -1,3 +1,4 @@
+using ECommerce.SeedData;
 using IOC;
 
 namespace ECommerce
@@ -15,6 +16,8 @@ namespace ECommerce
             Services.Register(builder.Services);
 
             var app = builder.Build();
+
+            DbInitializer.Initialize(app); // seed data
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -36,6 +39,7 @@ namespace ECommerce
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using DAL.dbcontext;
+using Entity.EntityClass;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,7 +17,10 @@ namespace IOC
         public static void Register(IServiceCollection services)
         {
             services.AddDbContext<ecommercedatabase>(
-             options => options.UseSqlServer("Server=.;Database=bookecommerce;Trusted_Connection=True;TrustServerCertificate=True;",x=> x.MigrationsAssembly("DAL")));
+             options => options.UseSqlServer("Server=.;Database=bookecommerce;Trusted_Connection=True;TrustServerCertificate=True;", x => x.MigrationsAssembly("DAL")));
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ecommercedatabase>()
+                .AddDefaultTokenProviders();
         }
 
     }
