@@ -1,32 +1,35 @@
-﻿<div class="sigin-card">
-    <h3 class="sigin-card-header">Singn In</h3>
-    <hr>
-    <div class="center">
-        <div class="row__ r1">
-            <input type="text" placeholder="first name">
-            <input type="text" placeholder="last name">
-        </div>
-        <div class="row_ r2">
-            <input type="text" placeholder="email">
-        </div>
-        <div class="row_ r3">
-            <input type="password" placeholder="password">
-        </div>
-        <div class="row_ r3">
-            <label>Remember me</label>
-            <input type="checkbox">
-        </div>
-        <button class="submit-btn uk-button uk-button-primary">SingIn</button>
-        <div class="row_ r4">
-            <a href="#">Forgot your password</a>
-        </div>
-        <div class="row_ r5">
-            <div>SingIn with</div>
-            <hr>
-            <br>
-            <div class="circle google"></div>
-            <div class="circle facebook"></div>
+﻿<form method="post" asp-action="SingIn">
+    <div class="sigin-card">
+        <h3 class="sigin-card-header">Singn In</h3>
+        <hr>
+        <div class="center">
+            <div class="row__ r1">
+                <input type="text" placeholder="first name">
+                <input type="text" placeholder="last name">
+            </div>
+            <div class="row_ r2">
+                <input type="text" placeholder="email">
+            </div>
+            <div class="row_ r3">
+                <input type="password" placeholder="password">
+            </div>
+            <div class="row_ r3">
+                <label>Remember me</label>
+                <input type="checkbox">
+            </div>
+            <button class="submit-btn uk-button uk-button-primary" type="submit">SingIn</button>
+            <div class="row_ r4">
+                <a href="#">Forgot your password</a>
+            </div>
+            <div class="row_ r5">
+                <div>SingIn with</div>
+                <hr>
+                <br>
+                <div class="circle google"></div>
+                <div class="circle facebook"></div>
+            </div>
         </div>
     </div>
-</div>
-  </div>
+    </div>
+
+</form>

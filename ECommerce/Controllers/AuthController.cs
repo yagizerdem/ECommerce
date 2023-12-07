@@ -8,5 +8,11 @@ namespace ECommerce.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult SingIn()
+        {
+            ;
+            return RedirectToAction("Index" , "Home");
+        }
     }
 }
