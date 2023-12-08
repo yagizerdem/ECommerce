@@ -25,6 +25,9 @@ namespace ECommerce.Controllers
                 var userName = User.Identity.Name;
 
                 ViewBag.UserName = userName;
+
+                // cheking user is admin
+                ViewBag.IsAdmin  = User.IsInRole("Admin");
             }
 
             return View();

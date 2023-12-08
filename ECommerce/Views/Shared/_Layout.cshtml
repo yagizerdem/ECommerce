@@ -28,6 +28,11 @@
         </main>
     </div>
 
+    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin)
+    {
+        <partial name="_AdminButton" />
+    }
+
     <partial name="Footer" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

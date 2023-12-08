@@ -3,7 +3,7 @@
 namespace ECommerce.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BookController : Controller
+    public class AdminController : Controller
     {
         public IActionResult Index()
         {
