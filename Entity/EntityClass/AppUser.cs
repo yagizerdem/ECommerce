@@ -16,8 +16,6 @@ namespace Entity.EntityClass
             this.Id = Guid.NewGuid().ToString();
         }
         [Key]
-        public string Id { get; set; }
-
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

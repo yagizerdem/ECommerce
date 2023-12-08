@@ -10,8 +10,6 @@ namespace Entity.EntityClass
 {
     public class Card : BaseEntity
     {
-        public AppUser User { get; set; }
-    
         public List<Book> Books { get; set; } 
 
         public double TotalPrice { get; set; }

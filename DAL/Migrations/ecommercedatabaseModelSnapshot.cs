@@ -22,6 +22,21 @@ namespace DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BookCard", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CardsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "CardsId");
+
+                    b.HasIndex("CardsId");
+
+                    b.ToTable("BookCard", (string)null);
+                });
+
             modelBuilder.Entity("Entity.EntityClass.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -42,7 +57,6 @@ namespace DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -107,6 +121,9 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUser")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("CreatedIp")
                         .HasColumnType("int");
 
@@ -119,14 +136,17 @@ namespace DAL.Migrations
                     b.Property<int>("UpdatedIp")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserIdId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AppUser");
 
-                    b.ToTable("Baskets");
+                    b.HasIndex("UserIdId");
+
+                    b.ToTable("Baskets", (string)null);
                 });
 
             modelBuilder.Entity("Entity.EntityClass.Book", b =>
@@ -137,18 +157,9 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AuthorId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AuthorIdId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("BookName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CardId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CreatedIp")
                         .HasColumnType("int");
@@ -185,13 +196,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId1");
-
-                    b.HasIndex("AuthorIdId");
-
-                    b.HasIndex("CardId");
-
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("Entity.EntityClass.Card", b =>
@@ -214,16 +219,11 @@ namespace DAL.Migrations
                     b.Property<int>("UpdatedIp")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BasketId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Cards");
+                    b.ToTable("Cards", (string)null);
                 });
 
             modelBuilder.Entity("Entity.EntityClass.Order", b =>
@@ -261,7 +261,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("BasketId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Entity.EntityClass.Shipper", b =>
@@ -288,7 +288,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shippers");
+                    b.ToTable("Shippers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -424,32 +424,36 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BookCard", b =>
+                {
+                    b.HasOne("Entity.EntityClass.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.EntityClass.Card", null)
+                        .WithMany()
+                        .HasForeignKey("CardsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Entity.EntityClass.Basket", b =>
                 {
                     b.HasOne("Entity.EntityClass.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("AppUser");
+
+                    b.HasOne("Entity.EntityClass.AppUser", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserIdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
-                });
 
-            modelBuilder.Entity("Entity.EntityClass.Book", b =>
-                {
-                    b.HasOne("Entity.EntityClass.AppUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId1");
-
-                    b.HasOne("Entity.EntityClass.AppUser", "AuthorId")
-                        .WithMany()
-                        .HasForeignKey("AuthorIdId");
-
-                    b.HasOne("Entity.EntityClass.Card", null)
-                        .WithMany("Books")
-                        .HasForeignKey("CardId");
-
-                    b.Navigation("Author");
-
-                    b.Navigation("AuthorId");
+                    b.Navigation("UserId");
                 });
 
             modelBuilder.Entity("Entity.EntityClass.Card", b =>
@@ -457,12 +461,6 @@ namespace DAL.Migrations
                     b.HasOne("Entity.EntityClass.Basket", null)
                         .WithMany("Cards")
                         .HasForeignKey("BasketId");
-
-                    b.HasOne("Entity.EntityClass.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entity.EntityClass.Order", b =>
@@ -530,11 +528,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("Entity.EntityClass.Basket", b =>
                 {
                     b.Navigation("Cards");
-                });
-
-            modelBuilder.Entity("Entity.EntityClass.Card", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

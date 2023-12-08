@@ -1,13 +1,20 @@
 ﻿@model LogInViewModel
 
 <link rel="stylesheet" href="~/css/LogIn.css"/>
+<div asp-validation-summary="All" class="sing-in-validation">
+
+</div>
   <div class="card">
     <h3>LogIn</h3>
-    <form>
+    <form method="post" asp-action="LogIn">
       <label asp-for="Email">Enter mail</label>
-      <input type="email" placeholder="enter email">
+      <input type="email" placeholder="enter email" asp-for="Email">
       <label asp-for="Password">Enter password</label>
-      <input type="password" placeholder="enter password">
+      <input type="password" placeholder="enter password" asp-for="Password">
+      <div class="form-group">
+            <label asp-for="RememberMe">Remember me : </label>
+            <input type="checkbox" asp-for="RememberMe">
+      </div>
       <button type="submit" class="submit-btn uk-button uk-button-primary">LogIn</button>
     </form>
   </div

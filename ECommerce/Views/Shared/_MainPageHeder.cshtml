@@ -2,9 +2,9 @@
 
 }
 @section Styles {
-
+    <link rel="stylesheet" href="~/css/MainPageHeader.css" />
 }
-<link rel="stylesheet" href="~/css/SingIn.css" />
+
 <header>
     <nav class="uk-navbar-container">
         <div class="uk-container">
@@ -16,6 +16,7 @@
                         <li class="uk-active"><a href="#">ECommerce</a></li>
                         <li class="uk-active"><a asp-action="Index" asp-controller="Home">Home</a></li>
                         <li class="uk-active"><a href="#">Basket</a></li>
+                        <li class="uk-active"><a>@(ViewBag.UserName == null ? ' ' : "Welcome " + ViewBag.UserName)</a></li>
                     </ul>
 
                 </div>

@@ -13,10 +13,12 @@ namespace ECommerce.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
-        public AuthController(UserManager<AppUser> _userManager, IMapper mapper)
+        private readonly SignInManager<AppUser> signInManager;
+        public AuthController(UserManager<AppUser> _userManager, IMapper mapper, SignInManager<AppUser> signInManager)
         {
             this._userManager = _userManager;
             this._mapper = mapper;
+            this.signInManager = signInManager;
         }
         public IActionResult SignIn()
         {
@@ -52,10 +54,36 @@ namespace ECommerce.Controllers
             return RedirectToAction("Index" , "Home");
         }
 
-        public async Task<IActionResult> LogIn()
+        public IActionResult LogIn()
         {
             LogInViewModel model = new LogInViewModel();
             return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LogInViewModel model)
+        {
+            try
+            {
+                AppUser appuser = await _userManager.FindByEmailAsync(model.Email);
+                if(appuser != null)
+                {
+                    var result = await signInManager.PasswordSignInAsync(appuser , model.Password , model.RememberMe, false);
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError("CustomError", "LogIn failed");
+                        return View(model);
+                    }
+                    // succesfull login
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            ModelState.AddModelError("CustomError", "User Not found");
+            return View(model);
+
         }
 
     }

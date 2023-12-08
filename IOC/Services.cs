@@ -2,10 +2,12 @@
 using DAL.dbcontext;
 using Entity.AutoMapperProfile;
 using Entity.EntityClass;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,9 @@ namespace IOC
                 .AddEntityFrameworkStores<ecommercedatabase>()
                 .AddDefaultTokenProviders();
 
+            // sing in manager 
+            services.AddScoped<SignInManager<AppUser>>();
+
             // automapper
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -31,6 +36,15 @@ namespace IOC
             });
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+
+            // cookie authenticaiton
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/Home/Index";
+    });
         }
 
     }
