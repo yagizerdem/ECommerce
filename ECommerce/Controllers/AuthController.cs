@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Threading.Tasks;
 using Utility;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 namespace ECommerce.Controllers
 {
 
@@ -37,6 +38,7 @@ namespace ECommerce.Controllers
             try
             {
                 var result =  await _userManager.CreateAsync(appUser,model.Password);
+                await _userManager.AddToRoleAsync(appUser, "Customer");
                 if (!result.Succeeded)
                 {
                     IEnumerable<IdentityError> errors = result.Errors.ToList();
@@ -84,6 +86,12 @@ namespace ECommerce.Controllers
             ModelState.AddModelError("CustomError", "User Not found");
             return View(model);
 
+        }
+        
+        public async Task<IActionResult> LogOut()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");    
         }
 
     }

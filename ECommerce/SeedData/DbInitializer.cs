@@ -55,6 +55,7 @@ namespace ECommerce.SeedData
                             Email = AdminEmail,
                         };
                         await _userManager.CreateAsync(adminuser, AdminPassword);
+                        await _userManager.AddToRoleAsync(adminuser, "Admin");
                     }
                     catch (Exception e)
                     {
