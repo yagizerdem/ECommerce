@@ -1,0 +1,48 @@
+﻿
+.card {
+    border-radius: 10px;
+    position: relative;
+    margin: 50px;
+    width: 200px;
+    height: 250px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    transform-style: preserve-3d;
+    transition: all 0.5s linear
+}
+
+.front {
+    border-radius: 10px;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    background-color: red;
+}
+
+.back {
+    border-radius: 10px;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    background-color: blue;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+}
+
+.card:hover {
+    transform: rotateY(180deg);
+    cursor: pointer;
+}
+.book-container {
+    width: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: auto;
+}
+
+@media only screen and (max-width: 1000px) {
+    .book-container {
+        width:500px;
+    }
+}
