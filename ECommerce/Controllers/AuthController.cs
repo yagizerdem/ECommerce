@@ -51,5 +51,12 @@ namespace ECommerce.Controllers
             }
             return RedirectToAction("Index" , "Home");
         }
+
+        public async Task<IActionResult> LogIn()
+        {
+            LogInViewModel model = new LogInViewModel();
+            return View(model);
+        }
+
     }
 }
