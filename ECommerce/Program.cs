@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification.Extensions;
 using ECommerce.SeedData;
 using IOC;
 
@@ -37,6 +38,8 @@ namespace ECommerce
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.UseNotyf(); 
 
             app.Run();
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCoreHero.ToastNotification;
+using AutoMapper;
 using DAL.dbcontext;
 using Entity.AutoMapperProfile;
 using Entity.EntityClass;
@@ -45,6 +46,10 @@ namespace IOC
         options.SlidingExpiration = true;
         options.AccessDeniedPath = "/Home/Index";
     });
+
+            // toastr notificaiton 
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
+
         }
 
     }

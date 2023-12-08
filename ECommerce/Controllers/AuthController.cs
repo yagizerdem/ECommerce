@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Threading.Tasks;
 using Utility;
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
+using AspNetCoreHero.ToastNotification.Abstractions;
 namespace ECommerce.Controllers
 {
 
@@ -15,11 +16,13 @@ namespace ECommerce.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly SignInManager<AppUser> signInManager;
-        public AuthController(UserManager<AppUser> _userManager, IMapper mapper, SignInManager<AppUser> signInManager)
+        private readonly INotyfService _notyf;
+        public AuthController(UserManager<AppUser> _userManager, IMapper mapper, SignInManager<AppUser> signInManager , INotyfService _notyf)
         {
             this._userManager = _userManager;
             this._mapper = mapper;
             this.signInManager = signInManager;
+            this._notyf = _notyf;
         }
         public IActionResult SignIn()
         {
@@ -46,6 +49,7 @@ namespace ECommerce.Controllers
                     {
                         ModelState.AddModelError(err.Code , err.Description.ToString());
                     }
+                    _notyf.Error(SD.SingINErrorMessage, 4);
                     return View(model);
                 }
             }
@@ -53,6 +57,7 @@ namespace ECommerce.Controllers
             {
                 Console.WriteLine(e.Message);
             }
+            _notyf.Success(SD.SingInMessage, 4);
             return RedirectToAction("Index" , "Home");
         }
 
@@ -73,9 +78,11 @@ namespace ECommerce.Controllers
                     if (!result.Succeeded)
                     {
                         ModelState.AddModelError("CustomError", "LogIn failed");
+                        _notyf.Error(SD.LogInErrorMessage, 4);
                         return View(model);
                     }
                     // succesfull login
+                    _notyf.Success(SD.LoggInMessage, 4);
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -83,6 +90,7 @@ namespace ECommerce.Controllers
             {
                 Console.WriteLine(e.Message);
             }
+            _notyf.Error(SD.LogInErrorMessage, 4);
             ModelState.AddModelError("CustomError", "User Not found");
             return View(model);
 
@@ -91,6 +99,7 @@ namespace ECommerce.Controllers
         public async Task<IActionResult> LogOut()
         {
             await signInManager.SignOutAsync();
+            _notyf.Information(SD.LogOutMessage, 4);
             return RedirectToAction("Index", "Home");    
         }
 
