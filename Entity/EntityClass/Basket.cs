@@ -10,7 +10,7 @@ namespace Entity.EntityClass
     public class Basket :BaseEntity
     {
 
-        public AppUser UserId { get; set; }
+        public string UserId { get; set; }
         [ForeignKey("AppUser")]
         public AppUser User { get; set; }
         public List<Card> Cards { get; set; }    

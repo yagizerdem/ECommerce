@@ -1,4 +1,75 @@
 ﻿@{
     Layout = "AdminLayout";   
 }
-<div>Add Book</div>
+@section Styles{
+    <link rel="stylesheet" href="~/css/AddBookForm.css"/>
+}
+
+@section Scripts{
+    <script src="https://cdn.tiny.cloud/1/qfrx42jv4dy2nje7xcg4ci09or03vn9sbu2zw2iau8e0wn6h/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/js/AddBookForm.js"></script>
+}
+
+<div class="container">
+    <form enctype="multipart/form-data" method="post">
+        <fieldset class="uk-fieldset">
+
+            <legend class="uk-legend">Enter Title</legend>
+            <div class="uk-margin">
+                <input class="uk-input" type="text" placeholder="Input" aria-label="Input">
+            </div>
+            <hr>
+            <label class="uk-legend">Enter Small Description</label>
+            <div class="uk-margin">
+                <textarea class="uk-textarea" rows="5" placeholder="Textarea" aria-label="Textarea"></textarea>
+            </div>
+            <hr>
+            <label class="uk-legend">Enter Description</label>
+            <textarea class="wsyeditor"></textarea>
+            <hr>
+            <label class="uk-legend">Price</label>
+            <br>
+            <input type="number" min="0" />
+            <hr>
+            <label class="uk-legend">Price5</label>
+            <br>
+            <input type="number" min="0" />
+            <hr>
+            <label class="uk-legend">Price10</label>
+            <br>
+            <input type="number" min="0" />
+            <hr>
+            <label class="uk-legend">Price20</label>
+            <br>
+            <input type="number" min="0" />
+            <hr>
+            <label class="uk-legend">Enter Discount Amount</label>
+            <div class=wrapper>
+                <div class="range">
+                    <input type="range" min="0" max="100" value="0" id="range" />
+                    <div class="value">0</div>
+                </div>
+                <hr>
+            </div>
+            <label class="uk-legend">Enter Author Name</label>
+            <div class="uk-margin">
+                <input class="uk-input" type="text" placeholder="Author Name" aria-label="Input">
+            </div>
+            <hr>
+            <label class="uk-legend">Book Count</label>
+            <br>
+            <input type="number" min="0" />
+            <br />
+            <hr />
+            <label class="uk-legend">Add Header Image</label>
+            <br>
+            <input type="file" name="image" accept=".jpeg, .jpg, .png" "  />
+            <hr />
+            <label class="uk-legend">Add Sub Images</label>
+            <br>
+            <input type="file" name="image" accept=".jpeg, .jpg, .png" multiple />
+            <hr />
+            <button type="submit" class="btn btn-success">Add Book</button>
+        </fieldset>
+    </form>
+</div>

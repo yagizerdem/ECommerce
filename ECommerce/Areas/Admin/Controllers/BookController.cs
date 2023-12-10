@@ -25,5 +25,11 @@ namespace ECommerce.Areas.Admin.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [ActionName("AddBook")]
+        public IActionResult AddBookToDatabase()
+        {
+            return View();
+        }
     }
 }

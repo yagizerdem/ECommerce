@@ -4,6 +4,7 @@ using DAL.dbcontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ecommercedatabase))]
-    partial class ecommercedatabaseModelSnapshot : ModelSnapshot
+    [Migration("20231210210651_update-user-foreignkeys")]
+    partial class updateuserforeignkeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,7 +158,14 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Author")
+                    b.Property<string>("AppUser")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BookName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -196,6 +206,8 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUser");
 
                     b.ToTable("Books");
                 });
@@ -447,6 +459,15 @@ namespace DAL.Migrations
                         .HasForeignKey("AppUser");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entity.EntityClass.Book", b =>
+                {
+                    b.HasOne("Entity.EntityClass.AppUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AppUser");
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("Entity.EntityClass.Card", b =>
