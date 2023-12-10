@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/AdminLayout.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    
+  <button class="burger" onclick="toggleMenu()"></button>
+  <div class="menu">
+    <nav>
+      <!-- <a href="#" style="animation-delay: 0.2s">About</a>
+      <a href="#" style="animation-delay: 0.3s">Portfolio</a>
+      <a href="#" style="animation-delay: 0.4s">Services</a>
+      <a href="#" style="animation-delay: 0.5s">Contact</a> -->
+        <a style="animation-delay: 0.2s" href="@Url.Action("Index", "Admin" ,new { area = "Admin" })">Admin DashBoard</a>
+        <a style="animation-delay: 0.4s" href="@Url.Action("List", "Book" ,new { area = "Admin" })">Books</a>
+    </nav>
+  </div>
+    <button class="HomePageButton" onclick="location.href='@Url.Action("Index", "Home" ,new { area = "" })'">Go to Home Page</button>
+
+  <div class="container-md">
+        @RenderBody()
+  </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/AdminLayout.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("Notyf")
+</body>
+</html>

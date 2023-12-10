@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Repository.Interface;
+using Repository.Repository;
+using Repository.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +53,8 @@ namespace IOC
             // toastr notificaiton 
             services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 
+            // unit of work
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
     }

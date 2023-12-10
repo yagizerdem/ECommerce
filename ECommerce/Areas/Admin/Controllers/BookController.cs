@@ -1,12 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entity.EntityClass;
+using Microsoft.AspNetCore.Mvc;
+using Repository.Interface;
+using Repository.UnitOfWork;
 
 namespace ECommerce.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class BookController : Controller
     {
-        public IActionResult Index()
+        private readonly IUnitOfWork unitofwork;
+        private readonly IGenericRepository<Book> bookRepository;
+        public BookController(IUnitOfWork unitOfWork)
         {
+            this.unitofwork = unitOfWork;
+            this.bookRepository = unitofwork.GetRepository<Book>();
+        }
+        public IActionResult List()
+        {
+            IEnumerable<Book> books = bookRepository.GetAll();
             return View();
         }
     }
