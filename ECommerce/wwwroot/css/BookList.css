@@ -1,0 +1,25 @@
+﻿.inner-container {
+    background-color: white;
+    display: inline-flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: auto;
+    justify-content: center;
+}
+.no-book-added{
+    color:white;
+    font-size:40px;
+    text-align:center;
+    font-weight:bolder;
+}
+@media screen and (max-width: 500px) {
+    /* Styles to apply when the viewport width is 600 pixels or wider */
+    .uk-form-width-medium {
+        display:none !important;
+    }
+}
+@media screen and (max-width: 300px) {
+    .search-btn {
+        display: none !important;
+    }
+}

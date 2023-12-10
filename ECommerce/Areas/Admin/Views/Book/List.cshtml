@@ -1,5 +1,55 @@
-﻿@{
+﻿@model List<Entity.EntityClass.Book> 
+@{
     Layout = "AdminLayout";
 }
+@section Styles{
+    <link rel="stylesheet" href="~/css/BookList.css"/>
+}
+<nav class="uk-navbar-container">
+    <div class="uk-container">
+        <div uk-navbar>
 
-list of books
+            <div class="uk-navbar-left">
+
+                <ul class="uk-navbar-nav">
+                    <li class="uk-active"><a href="@Url.Action("AddBook", "Book" ,new { area = "Admin" })">Add Book</a></li>
+                </ul>
+            </div>
+
+            <div class="uk-navbar-right">
+
+                <ul class="uk-navbar-nav">
+                    <li class="uk-active"><a>
+                            <input class="uk-input uk-form-width-medium" type="text" >
+                    </a></li>
+                    <li>
+                    </li>
+                    <li><a><button class="btn btn-info search-btn">Search Book</button></a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</nav>
+@if (Model.Count() == 0)
+{
+    <div class="no-book-added"> No Book Has Added </div>
+}
+else
+{
+    <div class="inner-container">
+        @foreach (var book in Model)
+        {
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@book.Title</h5>
+                    <p class="card-text">@book.SmallDescription</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+        }
+    </div>
+}

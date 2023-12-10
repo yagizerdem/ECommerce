@@ -197,8 +197,6 @@ body.open .menu a {
     left: 50%;
     transform: translate(-50%, -50%);
     background: #4d4c4c;
-    display: flex;
-    flex-wrap: wrap;
 }
 
 /* For WebKit browsers (Chrome, Safari) */

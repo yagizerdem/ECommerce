@@ -17,7 +17,12 @@ namespace ECommerce.Areas.Admin.Controllers
         }
         public IActionResult List()
         {
-            IEnumerable<Book> books = bookRepository.GetAll();
+            List<Book> books = bookRepository.GetAll().ToList();
+            return View(books);
+        }
+
+        public IActionResult AddBook()
+        {
             return View();
         }
     }
