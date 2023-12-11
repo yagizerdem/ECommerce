@@ -16,5 +16,6 @@ namespace Utility
         public static string BookModelErrorMessage = "Book model is not valid";
         public static string BookAddedToDatabase = "Book added to Database Successfull";
         public static string FileExtensionsNotCorrect = "File Extensions are not correct";
+        public static string InternalErrorOccured = "Internal Error Occured";
     }
 }
