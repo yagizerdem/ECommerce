@@ -1,8 +1,10 @@
-﻿using Entity.EntityClass;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Entity.EntityClass;
 using Entity.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
 using Repository.UnitOfWork;
+using Utility;
 
 namespace ECommerce.Areas.Admin.Controllers
 {
@@ -11,10 +13,12 @@ namespace ECommerce.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork unitofwork;
         private readonly IGenericRepository<Book> bookRepository;
-        public BookController(IUnitOfWork unitOfWork)
+        private readonly INotyfService _notyf;
+        public BookController(IUnitOfWork unitOfWork , INotyfService _notyf)
         {
             this.unitofwork = unitOfWork;
             this.bookRepository = unitofwork.GetRepository<Book>();
+            this._notyf = _notyf;
         }
         public IActionResult List()
         {
@@ -31,6 +35,23 @@ namespace ECommerce.Areas.Admin.Controllers
         [ActionName("AddBook")]
         public IActionResult AddBookToDatabase(BookModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                _notyf.Error(SD.BookModelErrorMessage, 4);
+                return View(model);
+            }
+            // validate images
+            List<IFormFile> files = model.SubImages;
+            files.Add(model.HeaderImage);
+            bool flag = ImageValidator.Control(files);
+            if(flag == false)
+            {
+                _notyf.Error(SD.FileExtensionsNotCorrect, 4);
+                return View(model);
+            }
+
+
+            _notyf.Success(SD.BookAddedToDatabase, 4);
             return View();
         }
     }

@@ -1,12 +1,12 @@
 ﻿using Entity.EntityClass;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Entity.Models
 {
     public class BookModel
@@ -35,8 +35,9 @@ namespace Entity.Models
         public string Author { get; set; }
         [Required]
         public int StockCount { get; set; }
-
+        [ValidateNever]
         public IFormFile HeaderImage { get; set; }
+        [ValidateNever]
         public List<IFormFile> SubImages { get; set; }
     }
 }

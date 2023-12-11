@@ -13,5 +13,8 @@ namespace Utility
         public static string LogInErrorMessage = "Error occured while attemting Log In";
         public static string SingInMessage = "User added to database successfull";
         public static string SingINErrorMessage = "Error occured while attempting Sing In";
+        public static string BookModelErrorMessage = "Book model is not valid";
+        public static string BookAddedToDatabase = "Book added to Database Successfull";
+        public static string FileExtensionsNotCorrect = "File Extensions are not correct";
     }
 }
