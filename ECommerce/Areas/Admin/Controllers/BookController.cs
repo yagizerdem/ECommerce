@@ -1,4 +1,5 @@
 ﻿using Entity.EntityClass;
+using Entity.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
 using Repository.UnitOfWork;
@@ -23,11 +24,12 @@ namespace ECommerce.Areas.Admin.Controllers
 
         public IActionResult AddBook()
         {
-            return View();
+            BookModel model = new BookModel();
+            return View(model);
         }
         [HttpPost]
         [ActionName("AddBook")]
-        public IActionResult AddBookToDatabase()
+        public IActionResult AddBookToDatabase(BookModel model)
         {
             return View();
         }

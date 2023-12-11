@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Entity.Models.BookModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     Layout = "AdminLayout";   
 }
 @section Styles{
@@ -11,63 +13,63 @@
 }
 
 <div class="container">
-    <form enctype="multipart/form-data" method="post">
+    <form enctype="multipart/form-data" method="post" asp-action="AddBook" asp-controller="Book" asp-area="Admin">
         <fieldset class="uk-fieldset">
 
             <legend class="uk-legend">Enter Title</legend>
             <div class="uk-margin">
-                <input class="uk-input" type="text" placeholder="Input" aria-label="Input">
+                <input class="uk-input" type="text" placeholder="Input" aria-label="Input" asp-for="@Model.Title">
             </div>
             <hr>
             <label class="uk-legend">Enter Small Description</label>
             <div class="uk-margin">
-                <textarea class="uk-textarea" rows="5" placeholder="Textarea" aria-label="Textarea"></textarea>
+                <textarea class="uk-textarea" rows="5" placeholder="Textarea" aria-label="Textarea" asp-for="@Model.SmallDescription"></textarea>
             </div>
             <hr>
             <label class="uk-legend">Enter Description</label>
-            <textarea class="wsyeditor"></textarea>
+            <textarea class="wsyeditor" asp-for="@Model.Description"></textarea>
             <hr>
             <label class="uk-legend">Price</label>
             <br>
-            <input type="number" min="0" />
+            <input type="number" min="0" asp-for="@Model.Price" />
             <hr>
             <label class="uk-legend">Price5</label>
             <br>
-            <input type="number" min="0" />
+            <input type="number" min="0" asp-for="@Model.Price5" />
             <hr>
             <label class="uk-legend">Price10</label>
             <br>
-            <input type="number" min="0" />
+            <input type="number" min="0" asp-for="@Model.Price10" />
             <hr>
             <label class="uk-legend">Price20</label>
             <br>
-            <input type="number" min="0" />
+            <input type="number" min="0" asp-for="@Model.Price20" />
             <hr>
             <label class="uk-legend">Enter Discount Amount</label>
             <div class=wrapper>
                 <div class="range">
-                    <input type="range" min="0" max="100" value="0" id="range" />
+                    <input type="range" min="0" max="100" value="0" id="range" asp-for="@Model.DiscountRate" />
                     <div class="value">0</div>
                 </div>
                 <hr>
             </div>
             <label class="uk-legend">Enter Author Name</label>
             <div class="uk-margin">
-                <input class="uk-input" type="text" placeholder="Author Name" aria-label="Input">
+                <input class="uk-input" type="text" placeholder="Author Name" aria-label="Input" asp-for="@Model.Author">
             </div>
             <hr>
-            <label class="uk-legend">Book Count</label>
+            <label class="uk-legend">Stock Count</label>
             <br>
-            <input type="number" min="0" />
+            <input type="number" min="0" asp-for="@Model.StockCount" />
             <br />
             <hr />
             <label class="uk-legend">Add Header Image</label>
             <br>
-            <input type="file" name="image" accept=".jpeg, .jpg, .png" "  />
+            <input type="file"  accept=".jpeg, .jpg, .png" asp-for="@Model.HeaderImage" />
             <hr />
             <label class="uk-legend">Add Sub Images</label>
             <br>
-            <input type="file" name="image" accept=".jpeg, .jpg, .png" multiple />
+            <input type="file"  accept=".jpeg, .jpg, .png" multiple asp-for="@Model.SubImages" />
             <hr />
             <button type="submit" class="btn btn-success">Add Book</button>
         </fieldset>
