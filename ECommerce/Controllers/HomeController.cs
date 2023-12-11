@@ -1,6 +1,8 @@
 using Entity.EntityClass;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Interface;
+using Repository.UnitOfWork;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -10,11 +12,14 @@ namespace ECommerce.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<HomeController> _logger;
-        
-        public HomeController(ILogger<HomeController> logger , UserManager<AppUser> _userManager)
+        private readonly IUnitOfWork unitofwork;
+        private readonly IGenericRepository<Book> bookRepository;
+        public HomeController(ILogger<HomeController> logger , UserManager<AppUser> _userManager , IUnitOfWork unitofwork)
         {
             _logger = logger;
             this._userManager = _userManager;
+            this.unitofwork = unitofwork;
+            this.bookRepository = unitofwork.GetRepository<Book>();
         }
 
         public IActionResult Index()
@@ -29,8 +34,9 @@ namespace ECommerce.Controllers
                 // cheking user is admin
                 ViewBag.IsAdmin  = User.IsInRole("Admin");
             }
-
-            return View();
+            // get books 
+            IEnumerable<Book> book_list = bookRepository.GetAll();
+            return View(book_list);
         }
 
         public IActionResult Privacy()

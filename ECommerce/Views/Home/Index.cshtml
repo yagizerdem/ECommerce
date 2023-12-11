@@ -1,35 +1,31 @@
-﻿@{
+﻿@model IEnumerable<Entity.EntityClass.Book>
+@{
     ViewData["Title"] = "Home Page";
 }
-
 @Html.Partial("ExchangeRateComponent")
 @section Styles{
 }
 <link rel="stylesheet" href="./css/Home.css"/>
-
-
 <div class="book-container">
-    <div class="card">
-        <div class="front">front</div>
-        <div class="back">back</div>
-    </div>
-    <div class="card">
-        <div class="front">front</div>
-        <div class="back">back</div>
-    </div>
+    @foreach (var book in Model)
+    {
+        string path = book.HeaderImagePath.Replace('\\', '/').Substring(1);
+        <div>
+            <div class="card">
+                @if (book.DiscountRate != 0)
+                {
+                    <div class="discount">@book.DiscountRate%</div>
+                }
 
-        <div class="card">
-        <div class="front">front</div>
-        <div class="back">back</div>
-    </div>
+                <div class="front" style="background-image:url('@path')"></div>
+                <div class="back">@book.SmallDescription</div>
 
-    <div class="card">
-        <div class="front">front</div>
-        <div class="back">back</div>
-    </div>
+            </div>
+            <div class="card-row">
+                <button>Inspect Book</button>
+                <button>Comments</button>
+            </div>
+        </div>
 
-    <div class="card">
-        <div class="front">front</div>
-        <div class="back">back</div>
-    </div>
+    }
 </div>
