@@ -11,7 +11,7 @@ namespace Repository.Interface
     {
         T GetById(int id , params Expression<Func<T, object>>[] includes);
         IEnumerable<T> GetAll();
-        IEnumerable<T> Find(Expression<Func<T, bool>> expression);
+        IEnumerable<T> Find(Expression<Func<T, bool>> expression , params Expression<Func<T, object>>[] includes);
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
         void Remove(T entity);

@@ -14,5 +14,6 @@ namespace Entity.Interface
 
         public int UpdatedIp { get; set; }
 
+        public DateTime CreateDate { get; set; }
     }
 }

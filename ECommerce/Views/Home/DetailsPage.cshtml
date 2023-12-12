@@ -118,6 +118,8 @@
 
 @* ajax *@
 <script>
+    var errormessage = '@(Utility.SD.SomethingWentWrong)'
+    var successmessage = '@(Utility.SD.AddBookBasket)'
     document.getElementById('submitbutton').addEventListener('click', function (event) {
         event.preventDefault(); // Prevent the default behavior of the anchor tag
         // Extract data from the anchor tag or any other source
@@ -134,16 +136,16 @@
             dataType: "json",
             success: function (response) {
                 if (response != null) {
-                    alert("Name : " + response.Name + ", Designation : " + response.Designation + ", Location :" + response.Location);
+                    toastr.success(successmessage);
                 } else {
-                    alert("Something went wrong");
+                        toastr.error(errormessage);
                 }
             },
             failure: function (response) {
-                alert(response.responseText);
+                    toastr.error(errormessage);
             },
             error: function (response) {
-                alert(response.responseText);
+                    toastr.error(errormessage);
             }
         });
     });

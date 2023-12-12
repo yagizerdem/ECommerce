@@ -5,6 +5,7 @@ using Repository.Interface;
 using Repository.UnitOfWork;
 using System.Diagnostics;
 using System.Security.Claims;
+using Utility;
 
 namespace ECommerce.Controllers
 {
@@ -24,7 +25,7 @@ namespace ECommerce.Controllers
 
         public IActionResult Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.Email); // will give the user's userId
+            var userId = User.GetLoggedInUserId<string>(); // extension method 
             if(userId != null)
             {
                 var userName = User.Identity.Name;

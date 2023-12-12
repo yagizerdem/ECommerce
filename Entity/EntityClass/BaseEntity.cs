@@ -12,5 +12,7 @@ namespace Entity.EntityClass
         public int Id { get ; set ; }
         public int CreatedIp { get ; set ; }
         public int UpdatedIp { get ; set ; }
+
+        public DateTime CreateDate { get ; set ; }
     }
 }

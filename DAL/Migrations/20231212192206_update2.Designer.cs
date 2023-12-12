@@ -4,6 +4,7 @@ using DAL.dbcontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ecommercedatabase))]
-    partial class ecommercedatabaseModelSnapshot : ModelSnapshot
+    [Migration("20231212192206_update2")]
+    partial class update2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,28 +109,28 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("AppUser")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CreatedIp")
                         .HasColumnType("int");
 
-                    b.Property<double>("TotoalPrice")
-                        .HasColumnType("float");
+                    b.Property<int>("TotoalPrice")
+                        .HasColumnType("int");
 
                     b.Property<int>("UpdatedIp")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AppUser");
 
                     b.ToTable("Baskets");
                 });
@@ -143,9 +146,6 @@ namespace DAL.Migrations
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedIp")
                         .HasColumnType("int");
@@ -209,14 +209,8 @@ namespace DAL.Migrations
                     b.Property<int?>("BasketId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BookCount")
-                        .HasColumnType("int");
-
                     b.Property<int>("BookId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedIp")
                         .HasColumnType("int");
@@ -279,9 +273,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("CreatedIp")
                         .HasColumnType("int");
 
@@ -308,9 +299,6 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedIp")
                         .HasColumnType("int");
@@ -468,9 +456,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("Entity.EntityClass.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUser");
 
                     b.Navigation("User");
                 });
