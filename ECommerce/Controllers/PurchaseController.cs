@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entity.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ECommerce.Controllers
 {
     public class PurchaseController : Controller
     {
-        public IActionResult AddToBasket()
+        [HttpPost]
+        public JsonResult AddToBasket([FromBody] PurchaseRequestModel purchaseRequest)
         {
-            return View();
+            
+            return Json(new { result = "success" });
         }
     }
 }

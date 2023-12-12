@@ -50,7 +50,7 @@
         font-size: 20px;
     }
 
-    .card_ > a:hover {
+    .card_ > form > a:hover {
         color:#fff !important;
     }
     .sheet {
@@ -69,7 +69,9 @@
         padding: 0 20px 0 100px;
         width: 100%;
     }
+
 </style>
+
 <div class="card_">
     <div class="left">
         @{
@@ -103,20 +105,46 @@
             <tr>
                 <form>
                     <input   type="hidden"/>
-                    <td><input type="number" min="1" /></td>
-                    <td><a>Buy Book</a></td>
+                    <td><input type="number" min="1" id="count" placeholder="Count"/></td>
+                <td><a class="btn" id="submitbutton">Buy Book</a></td>
                 </form>
-
             </tr>
         </table>
     </div>
 </div>
-
-
-
 <div class="sheet textarea" role="textbox" spellcheck="false" contenteditable="true">
     @Html.Raw(Model.Description)
-
 </div>
 
-
+@* ajax *@
+<script>
+    document.getElementById('submitbutton').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the default behavior of the anchor tag
+        // Extract data from the anchor tag or any other source
+        var myData = {
+            // Your data goes here
+            BookId: @Model.Id,
+            Count: parseInt($("#count").val())
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Purchase/AddToBasket",
+            data: JSON.stringify(myData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    alert("Name : " + response.Name + ", Designation : " + response.Designation + ", Location :" + response.Location);
+                } else {
+                    alert("Something went wrong");
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    });
+</script>
