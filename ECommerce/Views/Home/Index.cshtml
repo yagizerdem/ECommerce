@@ -22,8 +22,8 @@
 
             </div>
             <div class="card-row">
-                <button>Inspect Book</button>
-                <button>Comments</button>
+                <a class="uk-button uk-button-default" asp-action="DetailsPage" asp-controller="Home" asp-route-bookid ="@book.Id">Inspect Book</a>
+                <a class="uk-button uk-button-default" asp-action="Comments" asp-controller="Home" asp-route-bookid="@book.Id">Comments</a>
             </div>
         </div>
 

@@ -39,6 +39,15 @@ namespace ECommerce.Controllers
             return View(book_list);
         }
 
+        public IActionResult DetailsPage(int bookid)
+        {
+            Book book = bookRepository.GetById(bookid , x => x.Images);
+            return View(book);
+        }
+        public IActionResult Comments()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

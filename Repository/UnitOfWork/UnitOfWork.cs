@@ -14,11 +14,14 @@ namespace Repository.UnitOfWork
     {
         private readonly ecommercedatabase _context;
         private Dictionary<Type, object> _repositories;
+
         public UnitOfWork(ecommercedatabase context)
         {
             _context = context;
-            _repositories = new Dictionary<Type, object>();
+            _repositories = new Dictionary<Type, object>();    
         }
+
+
         public void Commit()
         {
             _context.SaveChanges();

@@ -1,4 +1,5 @@
 ﻿using DAL.dbcontext;
+using Microsoft.EntityFrameworkCore;
 using Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Repository.Repository
 {
@@ -32,9 +34,19 @@ namespace Repository.Repository
         {
             return _context.Set<T>().ToList();
         }
-        public T GetById(int id)
+        public T GetById(int id , params Expression<Func<T, object>>[] includes)
         {
-            return _context.Set<T>().Find(id);
+            var query = _context.Set<T>().AsQueryable();
+            // Assuming "Id" is the name of the property you want to filter by
+            query = query.Where(e => EF.Property<int>(e, "Id") == id);
+            if (includes  != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return query.FirstOrDefault();
         }
         public void Remove(T entity)
         {

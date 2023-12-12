@@ -11,5 +11,6 @@ namespace Repository.UnitOfWork
     {
         void Commit();
         IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DAL.dbcontext;
 using Entity.EntityClass;
+using Microsoft.EntityFrameworkCore;
 using Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,5 @@ namespace Repository.Repository
         {
             this._context = _context;
         }
-
     }
 }

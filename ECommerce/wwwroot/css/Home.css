@@ -61,9 +61,10 @@
     justify-content: center;
     align-items: center;
     z-index:10;
+    left:-40px;
 }
-.card-row > button{
-    margin:10px;
+.card-row > a{
+    margin:20px;
 }
 .discount {
     position: relative;

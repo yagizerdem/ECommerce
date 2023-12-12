@@ -1,0 +1,39 @@
+﻿.slider {
+    width: 500px;
+    height: 400px;
+    background: linear-gradient(110.6deg, rgb(156, 116, 129) -18.3%, rgb(67, 54, 74) 16.4%, rgb(47, 48, 67) 68.2%, rgb(27, 23, 36) 99.1%);
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.img-container {
+    width: 200px;
+    height: 300px;
+    background: transparent;
+    border-radius: 5px;
+    position: absolute;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position:center;
+}
+
+.left-arrow {
+    left: -20px;
+    color: blue;
+}
+
+.right-arrow {
+    right: -20px;
+    color: blue;
+}
+
+.arrow {
+    position: absolute;
+    cursor: pointer;
+}
