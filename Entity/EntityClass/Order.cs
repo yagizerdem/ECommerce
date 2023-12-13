@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Entity.Enum;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,11 +10,11 @@ namespace Entity.EntityClass
 {
     public class Order : BaseEntity
     {
-        public int BasketId { get; set; }
-        public Basket Basket { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; } 
-        public bool IsPending { get; set; }
-        public bool IsApproved { get; set; }
+        public List<OrderDetails> OrderDetails{ get; set; }
+        public string UserId { get; set; }
+        [Required]
+        public AppUser User { get; set; }
+               
+        public OrderStatus OrderStatus { get; set; }
     }
 }

@@ -10,7 +10,6 @@ namespace Entity.EntityClass
 {
     public class Basket :BaseEntity
     {
-
         public string UserId { get; set; }
         public AppUser User { get; set; }
         public List<Card> Cards { get; set; }    

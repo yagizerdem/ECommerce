@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Entity.Enum
 {
-    public enum BasketStatus
+    public enum OrderStatus
     {
         Pending,
-        Approved,
+        ReadyToDeliver,
+        OnTheWay ,
+        Delivered,
+        Canceled,
         Banned,
     }
 }

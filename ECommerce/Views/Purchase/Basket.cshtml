@@ -1,5 +1,5 @@
 ﻿@model List<Entity.EntityClass.Card>
-
+@using Microsoft.AspNetCore.Mvc.TagHelpers
  @section Styles{
      <style>
         .uk-table th {
@@ -30,15 +30,21 @@
             {
                 path = card.Book.HeaderImagePath.Replace('\\', '/').Substring(1);
             }
-
             <tr>
                 <td><img src="@path" alt="book cover"></td>
-                <td>Book Count : @card.BookCount</td>
-                <td>Total Price : @card.TotalPrice</td>
-                <td><a class="btn btn-danger">Remove Book</a></td>
-                <td><a class="btn btn-success">Add Book</a></td>
+                <td>Book Count : <span id="bookcount">@card.BookCount</span></td>
+                <td>Total Price : <span id="totalprice">@card.TotalPrice</span></td>
+                <form method="post" asp-action="RemoveSingleBook">
+                    <input type="hidden" name="bookId" value="@card.Book.Id" />
+                    <td><button class="btn btn-danger" type="submit">Remove Book</button></td>
+                </form>
+                <form method="post" asp-action="AddSingleBook">
+                    <input type="hidden" name="bookId" value="@card.Book.Id" />
+                    <td><button class="btn btn-success" id="addbook">Add Book</button></td>
+                </form>
             </tr>
         }
     </tbody>
 </table>
 <div><a class="btn btn-info">Confirm Buy Basket</a></div>
+

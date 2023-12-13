@@ -22,5 +22,6 @@ namespace Utility
         public static string Failed = "Failed";
         public static string SomethingWentWrong = "Someting Went Wrong";
         public static string AddBookBasket = "Book added to basket successfully";
+        public static string BookRemovedFromDatabase = "Book removed from database";
     }
 }

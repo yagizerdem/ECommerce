@@ -95,14 +95,13 @@ namespace ECommerce.Controllers
                 }
                 basket.TotoalPrice = CalculateBasketTotalPrice(cards);
                 unitofwork.Commit();
-            
+                return Json(new { result = "success"});
             }
             catch (Exception ex)
             {
                 var errorResponse = new { error = "An error occurred", message = ex.Message };
                 return BadRequest(errorResponse); // 400 Bad Request
             }
-            return Json(new { result = "success" });
         }
     
         public IActionResult Basket()
@@ -120,6 +119,63 @@ namespace ECommerce.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public IActionResult AddSingleBook(int bookId)
+        {
+            try
+            {
+                string userid = User.GetLoggedInUserId<string>();
+                Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
+                Book book = bookRepository.GetById(bookId);
+                foreach (var card in basket.Cards)
+                {
+                    if (card.BookId == bookId)
+                    {
+                        card.BookCount++;
+                        card.TotalPrice = CalculateTotalBookPrice(book, card.BookCount);
+                        break;
+                    }
+                }
+                unitofwork.Commit();
+                _notyf.Success(SD.BookAddedToDatabase);
+            }
+            catch(Exception e)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+            }
+            return RedirectToAction("Basket");  
+        }
+        [HttpPost]
+        public IActionResult RemoveSingleBook(int bookId)
+        {
+            try
+            {
+                string userid = User.GetLoggedInUserId<string>();
+                Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
+                Book book = bookRepository.GetById(bookId);
+                foreach (var card in basket.Cards)
+                {
+                    if (card.BookId == bookId)
+                    {
+                        card.BookCount--;
+                        if(card.BookCount == 0)
+                        {
+                            cardRepository.Remove(card);
+                            break;
+                        }
+                        card.TotalPrice = CalculateTotalBookPrice(book, card.BookCount);
+                        break;
+                    }
+                }
+                unitofwork.Commit();
+                _notyf.Success(SD.BookRemovedFromDatabase);
+            }
+            catch (Exception e)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+            }
+            return RedirectToAction("Basket");
+        }
 
         // helper methods
         public static double CalculateTotalBookPrice(Book book, int BookCount)
