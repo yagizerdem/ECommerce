@@ -42,7 +42,6 @@ namespace ECommerce.Controllers
             this.bookRepository = unitofwork.GetRepository<Book>();
         }
         [HttpPost]
-
         public async Task<IActionResult> AddToBasket([FromBody] PurchaseRequestModel purchaseRequest)
         {
             if(purchaseRequest.Count <= 0)
@@ -108,7 +107,17 @@ namespace ECommerce.Controllers
     
         public IActionResult Basket()
         {
-            return View();
+            List<Card> model = new List<Card>(); 
+            string userid = User.GetLoggedInUserId<string>();
+            Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
+            if (basket != null)
+            {
+                foreach (var card in basket.Cards)
+                {
+                    model.Add(cardRepository.GetById(card.Id , x => x.Book));
+                }
+            }
+            return View(model);
         }
 
 
