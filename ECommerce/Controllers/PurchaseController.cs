@@ -177,6 +177,18 @@ namespace ECommerce.Controllers
             return RedirectToAction("Basket");
         }
 
+        public IActionResult Payment()
+        {
+            OrderFormModel model = new OrderFormModel();
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Payment(OrderFormModel model)
+        {
+            OrderDetails orderDetails = _mapper.Map<OrderDetails>(model);
+            return View(model);
+        }
+
         // helper methods
         public static double CalculateTotalBookPrice(Book book, int BookCount)
         {

@@ -14,7 +14,6 @@ namespace Entity.EntityClass
         public string UserId { get; set; }
         [Required]
         public AppUser User { get; set; }
-               
         public OrderStatus OrderStatus { get; set; }
     }
 }

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using AspNetCoreHero.ToastNotification.Abstractions;
 namespace ECommerce.Controllers
 {
-
     public class AuthController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
