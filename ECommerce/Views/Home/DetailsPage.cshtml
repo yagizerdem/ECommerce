@@ -75,7 +75,11 @@
 <div class="card_">
     <div class="left">
         @{
-            string headerimgpath = Model.HeaderImagePath.Replace('\\', '/').Substring(1);
+            string headerimgpath = null;
+            if (Model.HeaderImagePath != null)
+            {
+                headerimgpath = Model.HeaderImagePath.Replace('\\', '/').Substring(1);
+            } 
         }
         <div class="bookcover" style="background-image : url('@headerimgpath')"></div>
     </div>

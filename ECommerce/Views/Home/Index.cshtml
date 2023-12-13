@@ -9,7 +9,11 @@
 <div class="book-container">
     @foreach (var book in Model)
     {
-        string path = book.HeaderImagePath.Replace('\\', '/').Substring(1);
+        string path = null;
+        @if (book.HeaderImagePath != null)
+        {
+            path = book.HeaderImagePath.Replace('\\', '/').Substring(1);
+        }
         <div>
             <div class="card">
                 @if (book.DiscountRate != 0)

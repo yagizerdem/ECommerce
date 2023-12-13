@@ -26,9 +26,10 @@ namespace Repository.Repository
         {
             _context.Set<T>().AddRange(entities);
         }
-        public IEnumerable<T> Find(Expression<Func<T, bool>> expression , params Expression<Func<T, object>>[] includes)
+        public IEnumerable<T> Find(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
         {
             var query = _context.Set<T>().AsQueryable();
+
             if (includes != null)
             {
                 foreach (var include in includes)
@@ -36,8 +37,10 @@ namespace Repository.Repository
                     query = query.Include(include);
                 }
             }
-            return _context.Set<T>().Where(expression);
+
+            return query.Where(expression).ToList();
         }
+
         public IEnumerable<T> GetAll()
         {
             return _context.Set<T>().ToList();

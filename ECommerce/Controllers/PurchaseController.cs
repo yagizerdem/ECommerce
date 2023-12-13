@@ -51,45 +51,52 @@ namespace ECommerce.Controllers
             }
             try
             {
-                // finding if card exit
-                var userId = User.GetLoggedInUserId<string>();
-                Card? cardFromDb = cardRepository.Find(x => x.BookId == purchaseRequest.BookId && x.AppUserId == userId).FirstOrDefault();
+                // implement logic card - basket logic
+                string userid = User.GetLoggedInUserId<string>();
+                Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending , x => x.Cards).FirstOrDefault();
                 Book book = bookRepository.GetById(purchaseRequest.BookId);
-                if (cardFromDb == null)
+                if (basket == null)
                 {
-                    cardFromDb = new Card()
+                    basket = new Basket()
                     {
-                        AppUserId = userId,
-                        BookId = purchaseRequest.BookId,
+                        UserId = userid,
+                        status = Entity.Enum.BasketStatus.Pending,
+                        TotoalPrice = 0,
+                        Cards = new List<Card>(),
+                    };
+                    basketRepository.Add(basket);
+                    unitofwork.Commit(); // crete basket to get id 
+                }
+                // loking for cards
+                bool flag = true;
+                List<Card> cards = new List<Card>();
+                cards.AddRange(basket.Cards);
+                foreach (var card in cards)
+                {
+                    if(card.BookId == purchaseRequest.BookId)
+                    {
+                        card.BookCount += purchaseRequest.Count;
+                        card.TotalPrice = CalculateTotalBookPrice(book, card.BookCount);
+                        flag = false;
+                        break;
+                    }
+                }
+                // means there is no card for spesific book 
+                if (flag)
+                {
+                    Card newcard = new Card()
+                    {
                         BookCount = purchaseRequest.Count,
                         TotalPrice = CalculateTotalBookPrice(book, purchaseRequest.Count),
+                        BasketId = basket.Id,
+                        BookId = purchaseRequest.BookId,
                     };
-                    cardRepository.Add(cardFromDb);
+                    cards.Add(newcard);
+                    cardRepository.Add(newcard);
                 }
-                else
-                {
-                    cardFromDb.BookCount += purchaseRequest.Count;
-                    cardFromDb.TotalPrice = CalculateTotalBookPrice(book, cardFromDb.BookCount);
-                }
-                // finding basket 
-                Basket? basketFromdb = basketRepository.Find(x => x.UserId == userId &&
-                x.status == Entity.Enum.BasketStatus.Pending, x => new string[] { "Card" }).FirstOrDefault();
-                if (basketFromdb == null)
-                {
-                    basketFromdb = new Basket()
-                    {
-                        UserId = userId,
-                        status = Entity.Enum.BasketStatus.Pending,
-                        TotoalPrice = cardFromDb.TotalPrice,
-                    };
-                    basketRepository.Add(basketFromdb);
-                }
-                else
-                {
-                    basketFromdb.TotoalPrice = CalculateBasketTotalPrice(basketFromdb.Cards);
-                }
-                // commiting changes to datbase
+                basket.TotoalPrice = CalculateBasketTotalPrice(cards);
                 unitofwork.Commit();
+            
             }
             catch (Exception ex)
             {
@@ -99,6 +106,12 @@ namespace ECommerce.Controllers
             return Json(new { result = "success" });
         }
     
+        public IActionResult Basket()
+        {
+            return View();
+        }
+
+
         // helper methods
         public static double CalculateTotalBookPrice(Book book, int BookCount)
         {

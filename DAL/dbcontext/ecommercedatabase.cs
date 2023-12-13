@@ -8,6 +8,7 @@ using Entity.EntityClass;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
+using System.Reflection.Emit;
 namespace DAL.dbcontext
 {
     public class ecommercedatabase : IdentityDbContext<AppUser , IdentityRole, string>
@@ -29,6 +30,20 @@ namespace DAL.dbcontext
             builder.Entity<AppUser>()
             .HasIndex(u => u.Email)
             .IsUnique();
+
+            //builder.Entity<Card>()
+            //    .HasOne(c => c.Basket)
+            //    .WithMany(b => b.Cards)
+            //    .HasForeignKey(c => c.BasketId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+
+
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
         }
     }
 }

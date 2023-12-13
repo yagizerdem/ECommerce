@@ -199,14 +199,7 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("BasketId")
+                    b.Property<int>("BasketId")
                         .HasColumnType("int");
 
                     b.Property<int>("BookCount")
@@ -228,8 +221,6 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("BasketId");
 
@@ -477,15 +468,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Entity.EntityClass.Card", b =>
                 {
-                    b.HasOne("Entity.EntityClass.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
+                    b.HasOne("Entity.EntityClass.Basket", "Basket")
+                        .WithMany("Cards")
+                        .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Entity.EntityClass.Basket", null)
-                        .WithMany("Cards")
-                        .HasForeignKey("BasketId");
 
                     b.HasOne("Entity.EntityClass.Book", "Book")
                         .WithMany("Cards")
@@ -493,7 +480,7 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("Basket");
 
                     b.Navigation("Book");
                 });

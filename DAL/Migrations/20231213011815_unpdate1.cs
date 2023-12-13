@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class mig1 : Migration
+    public partial class unpdate1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,28 +53,11 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Baskets",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TotoalPrice = table.Column<int>(type: "int", nullable: false),
-                    IsOrdered = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedIp = table.Column<int>(type: "int", nullable: false),
-                    UpdatedIp = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Baskets", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Books",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SmallDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -83,8 +66,12 @@ namespace DAL.Migrations
                     Price10 = table.Column<double>(type: "float", nullable: false),
                     Price20 = table.Column<double>(type: "float", nullable: false),
                     DiscountRate = table.Column<double>(type: "float", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StockCount = table.Column<int>(type: "int", nullable: false),
+                    HeaderImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedIp = table.Column<int>(type: "int", nullable: false),
-                    UpdatedIp = table.Column<int>(type: "int", nullable: false)
+                    UpdatedIp = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,7 +87,8 @@ namespace DAL.Migrations
                     ShipperName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShipperCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedIp = table.Column<int>(type: "int", nullable: false),
-                    UpdatedIp = table.Column<int>(type: "int", nullable: false)
+                    UpdatedIp = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -214,15 +202,62 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Baskets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TotoalPrice = table.Column<double>(type: "float", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
+                    CreatedIp = table.Column<int>(type: "int", nullable: false),
+                    UpdatedIp = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Baskets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Baskets_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cards",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    BasketId = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    BasketId = table.Column<int>(type: "int", nullable: true),
+                    BookCount = table.Column<int>(type: "int", nullable: false),
                     CreatedIp = table.Column<int>(type: "int", nullable: false),
-                    UpdatedIp = table.Column<int>(type: "int", nullable: false)
+                    UpdatedIp = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -231,7 +266,14 @@ namespace DAL.Migrations
                         name: "FK_Cards_Baskets_BasketId",
                         column: x => x.BasketId,
                         principalTable: "Baskets",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cards_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -246,7 +288,8 @@ namespace DAL.Migrations
                     IsPending = table.Column<bool>(type: "bit", nullable: false),
                     IsApproved = table.Column<bool>(type: "bit", nullable: false),
                     CreatedIp = table.Column<int>(type: "int", nullable: false),
-                    UpdatedIp = table.Column<int>(type: "int", nullable: false)
+                    UpdatedIp = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,30 +298,6 @@ namespace DAL.Migrations
                         name: "FK_Orders_Baskets_BasketId",
                         column: x => x.BasketId,
                         principalTable: "Baskets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BookCard",
-                columns: table => new
-                {
-                    BooksId = table.Column<int>(type: "int", nullable: false),
-                    CardsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookCard", x => new { x.BooksId, x.CardsId });
-                    table.ForeignKey(
-                        name: "FK_BookCard_Books_BooksId",
-                        column: x => x.BooksId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookCard_Cards_CardsId",
-                        column: x => x.CardsId,
-                        principalTable: "Cards",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -330,14 +349,24 @@ namespace DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookCard_CardsId",
-                table: "BookCard",
-                column: "CardsId");
+                name: "IX_Baskets_UserId",
+                table: "Baskets",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cards_BasketId",
                 table: "Cards",
                 column: "BasketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cards_BookId",
+                table: "Cards",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_BookId",
+                table: "Images",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_BasketId",
@@ -364,7 +393,10 @@ namespace DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BookCard");
+                name: "Cards");
+
+            migrationBuilder.DropTable(
+                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -376,16 +408,13 @@ namespace DAL.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Cards");
+                name: "Baskets");
 
             migrationBuilder.DropTable(
-                name: "Baskets");
+                name: "AspNetUsers");
         }
     }
 }
