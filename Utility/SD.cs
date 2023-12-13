@@ -23,5 +23,6 @@ namespace Utility
         public static string SomethingWentWrong = "Someting Went Wrong";
         public static string AddBookBasket = "Book added to basket successfully";
         public static string BookRemovedFromDatabase = "Book removed from database";
+        public static string PaymentError = "Error occured in paymet process";
     }
 }

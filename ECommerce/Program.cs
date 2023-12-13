@@ -1,6 +1,7 @@
 using AspNetCoreHero.ToastNotification.Extensions;
 using ECommerce.SeedData;
 using IOC;
+using Stripe;
 
 namespace ECommerce
 {
@@ -27,7 +28,7 @@ namespace ECommerce
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            StripeConfiguration.ApiKey = "sk_test_51NlE46LTjHRP3ilQoRUg1qQtTMMEaLHLKPFd0PoZKatV2Oyz6dOqUmcRjD6fDyPasniioajoTd54mSdVuNvJiYnv00HnykloUW";
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -5,12 +5,9 @@ using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Identity.Client;
 using Repository.Interface;
 using Repository.UnitOfWork;
-using System.Collections.Generic;
-using System.Security.Claims;
+using Stripe.Checkout;
 using Utility;
 
 namespace ECommerce.Controllers
@@ -18,18 +15,19 @@ namespace ECommerce.Controllers
     [Authorize]
     public class PurchaseController : Controller
     {
+        private readonly IWebHostEnvironment env;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly SignInManager<AppUser> signInManager;
         private readonly INotyfService _notyf;
         private readonly IUnitOfWork unitofwork;
-        private readonly IGenericRepository<Card> cardRepository;
+        private readonly IGenericRepository<Entity.EntityClass.Card> cardRepository;
         private readonly IGenericRepository<Basket> basketRepository;
         private readonly IGenericRepository<Book> bookRepository;
         public PurchaseController(
-            UserManager<AppUser> _userManager, IMapper mapper, 
+            UserManager<AppUser> _userManager, IMapper mapper,
             SignInManager<AppUser> signInManager, INotyfService _notyf,
-            IUnitOfWork unitofwork
+            IUnitOfWork unitofwork, IWebHostEnvironment env
             )
         {
             this._userManager = _userManager;
@@ -37,14 +35,15 @@ namespace ECommerce.Controllers
             this.signInManager = signInManager;
             this._notyf = _notyf;
             this.unitofwork = unitofwork;
-            this.cardRepository = unitofwork.GetRepository<Card>();
+            this.cardRepository = unitofwork.GetRepository<Entity.EntityClass.Card>();
             this.basketRepository = unitofwork.GetRepository<Basket>();
             this.bookRepository = unitofwork.GetRepository<Book>();
+            this.env = env;
         }
         [HttpPost]
         public async Task<IActionResult> AddToBasket([FromBody] PurchaseRequestModel purchaseRequest)
         {
-            if(purchaseRequest.Count <= 0)
+            if (purchaseRequest.Count <= 0)
             {
                 return BadRequest(); // 400 Bad Request
             }
@@ -52,7 +51,7 @@ namespace ECommerce.Controllers
             {
                 // implement logic card - basket logic
                 string userid = User.GetLoggedInUserId<string>();
-                Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending , x => x.Cards).FirstOrDefault();
+                Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
                 Book book = bookRepository.GetById(purchaseRequest.BookId);
                 if (basket == null)
                 {
@@ -61,18 +60,18 @@ namespace ECommerce.Controllers
                         UserId = userid,
                         status = Entity.Enum.BasketStatus.Pending,
                         TotoalPrice = 0,
-                        Cards = new List<Card>(),
+                        Cards = new List<Entity.EntityClass.Card>(),
                     };
                     basketRepository.Add(basket);
                     unitofwork.Commit(); // crete basket to get id 
                 }
                 // loking for cards
                 bool flag = true;
-                List<Card> cards = new List<Card>();
+                List<Entity.EntityClass.Card> cards = new List<Entity.EntityClass.Card>();
                 cards.AddRange(basket.Cards);
                 foreach (var card in cards)
                 {
-                    if(card.BookId == purchaseRequest.BookId)
+                    if (card.BookId == purchaseRequest.BookId)
                     {
                         card.BookCount += purchaseRequest.Count;
                         card.TotalPrice = CalculateTotalBookPrice(book, card.BookCount);
@@ -83,7 +82,7 @@ namespace ECommerce.Controllers
                 // means there is no card for spesific book 
                 if (flag)
                 {
-                    Card newcard = new Card()
+                    Entity.EntityClass.Card newcard = new Entity.EntityClass.Card()
                     {
                         BookCount = purchaseRequest.Count,
                         TotalPrice = CalculateTotalBookPrice(book, purchaseRequest.Count),
@@ -95,7 +94,7 @@ namespace ECommerce.Controllers
                 }
                 basket.TotoalPrice = CalculateBasketTotalPrice(cards);
                 unitofwork.Commit();
-                return Json(new { result = "success"});
+                return Json(new { result = "success" });
             }
             catch (Exception ex)
             {
@@ -103,17 +102,17 @@ namespace ECommerce.Controllers
                 return BadRequest(errorResponse); // 400 Bad Request
             }
         }
-    
+
         public IActionResult Basket()
         {
-            List<Card> model = new List<Card>(); 
+            List<Entity.EntityClass.Card> model = new List<Entity.EntityClass.Card>();
             string userid = User.GetLoggedInUserId<string>();
             Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
             if (basket != null)
             {
                 foreach (var card in basket.Cards)
                 {
-                    model.Add(cardRepository.GetById(card.Id , x => x.Book));
+                    model.Add(cardRepository.GetById(card.Id, x => x.Book));
                 }
             }
             return View(model);
@@ -139,11 +138,11 @@ namespace ECommerce.Controllers
                 unitofwork.Commit();
                 _notyf.Success(SD.BookAddedToDatabase);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _notyf.Error(SD.SomethingWentWrong);
             }
-            return RedirectToAction("Basket");  
+            return RedirectToAction("Basket");
         }
         [HttpPost]
         public IActionResult RemoveSingleBook(int bookId)
@@ -158,7 +157,7 @@ namespace ECommerce.Controllers
                     if (card.BookId == bookId)
                     {
                         card.BookCount--;
-                        if(card.BookCount == 0)
+                        if (card.BookCount == 0)
                         {
                             cardRepository.Remove(card);
                             break;
@@ -185,8 +184,47 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult Payment(OrderFormModel model)
         {
+            var url = Request.Scheme + "://" + Request.Host.Value; // redirection url after payment
+
             OrderDetails orderDetails = _mapper.Map<OrderDetails>(model);
-            return View(model);
+            string userid = User.GetLoggedInUserId<string>();
+            Basket basketfromdb = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending , x => x.Cards).First();
+
+            // creatgin list of books for paymetn
+            List<Stripe.Checkout.SessionLineItemOptions> list = new List<Stripe.Checkout.SessionLineItemOptions>();
+            foreach (var card in basketfromdb.Cards)
+            {
+                Book book = bookRepository.GetById(card.BookId);
+                Stripe.Checkout.SessionLineItemOptions option = new Stripe.Checkout.SessionLineItemOptions()
+                {
+                    PriceData = new Stripe.Checkout.SessionLineItemPriceDataOptions
+                    {
+                        Currency = "usd",
+                        ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = card.Book.Title.ToString(),
+                        },
+                        UnitAmount = (int)ReturnUnitPrice(card.Book , card.BookCount)*100,
+                    },
+                    Quantity = card.BookCount,
+                };
+                list.Add(option);
+            }
+
+            // stripe config
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+                LineItems = list,
+                Mode = "payment",
+                SuccessUrl = url,
+                CancelUrl = url,
+            };
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
         }
 
         // helper methods
@@ -197,22 +235,43 @@ namespace ECommerce.Controllers
             else if (BookCount < 10) total += book.Price5 * BookCount;
             else if (BookCount < 20) total += book.Price10 * BookCount;
             else total += book.Price20 * BookCount;
-            if(book.DiscountRate != 0)
+            if (book.DiscountRate != 0)
             {
                 double rate = 100 - book.DiscountRate;
                 total = total * rate / 100;
             }
             return total;
         }
-        
-        public static double CalculateBasketTotalPrice(IEnumerable<Card> list)
+
+        public static double CalculateBasketTotalPrice(IEnumerable<Entity.EntityClass.Card> list)
         {
             double total = 0;
             foreach (var card in list)
             {
-                total += card.TotalPrice;    
+                total += card.TotalPrice;
             }
             return total;
+        }
+
+        public static double ReturnUnitPrice(Book book , int bookCount)
+        {
+            double discount = (100 - book.DiscountRate) / 100;
+            if (bookCount < 5)
+            {
+                return book.Price * discount;
+            }
+            else if(bookCount < 10)
+            {
+                return book.Price5 * discount;
+            }
+            else if (bookCount < 10)
+            {
+                return book.Price10 * discount;
+            }
+            else
+            {
+                return book.Price20 * discount;
+            }
         }
     }
 }
