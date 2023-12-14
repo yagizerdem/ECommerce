@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,5 +27,7 @@ namespace Entity.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+        [ValidateNever]
+        public string UserRole { get; set; }
     }
 }

@@ -1,0 +1,88 @@
+﻿@model List<Entity.EntityClass.AppUser>
+@{
+    Layout = "AdminLayout";
+}
+@section Styles {
+    <link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/lib//datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/customerDatatable.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#customerDatatable").DataTable({
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "ajax": {
+                    "url": "/Admin/CustomerAPI/GetCustomers",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs": [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+                "columns": [
+                    { "data": "id", "name": "Id", "autoWidth": true },
+                    { "data": "firstName", "name": "First Name", "autoWidth": true },
+                    { "data": "lastName", "name": "Last Name", "autoWidth": true },
+                    { "data": "email", "name": "Email", "autoWidth": true },
+                    { "data": "emailConfirmed", "name": "EmailConfirmed", "autoWidth": true },
+                    { "data": "userName", "name": "UserName", "autoWidth": true },
+                    {
+                        "render": function (data, row) { return "<a href='#' class='btn btn-danger' onclick=DeleteCustomer('" + row.id + "'); >Delete</a>"; }
+                    },
+                ]
+            });
+        });
+    </script>
+}
+<nav class="uk-navbar-container">
+    <div class="uk-container">
+        <div uk-navbar>
+
+            <div class="uk-navbar-left">
+
+                <ul class="uk-navbar-nav">
+                    <li class="uk-active"><a style="color:#4a5ec1; border:1px solid #c5a8a8 ;padding:10px;background-color:#f3eaea;" href="@Url.Action("AddUser", "User" ,new { area = "Admin" })">Add User</a></li>
+                </ul>
+            </div>
+
+            <div class="uk-navbar-right">
+
+
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="background-color:#fff; margin-top:40px;padding-bottom:40px;">
+    <br />
+    <div style="width:90%; margin:0 auto;">
+        <table id="customerDatatable" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>EmailConfirmed</th>
+                    <th>UserName</th>
+                    <th>DeleteUser</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+            </tbody>
+        </table>
+    </div>
+</div>

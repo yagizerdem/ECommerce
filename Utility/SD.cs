@@ -26,5 +26,7 @@ namespace Utility
         public static string PaymentError = "Error occured in paymet process";
         public static string PaymentFailded = "Payment failded";
         public static string SuccessfulPaymetn = "Successfull Payment";
+        public static string UserAddError = "Error occured while adding user to database";
+        public static string UserAddSuccessfull = "User added to database successfully";
     }
 }

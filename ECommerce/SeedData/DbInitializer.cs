@@ -14,7 +14,7 @@ namespace ECommerce.SeedData
             const string AdminUserName = "admin";
             const string AdminPassword = "SifreBu123!";
             const string AdminEmail = "admin@gmail.com";
-            string[] Roles = new string[3] { "Admin", "Author", "Customer" };
+            string[] Roles = new string[4] { "Admin", "Employee", "Customer"  , "Shipper"};
 
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {

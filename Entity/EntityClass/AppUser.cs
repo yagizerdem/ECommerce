@@ -18,6 +18,6 @@ namespace Entity.EntityClass
         [Key]
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
+        public string? ProfileImagePath { get; set; }
     }
 }
