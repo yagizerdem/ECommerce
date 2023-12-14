@@ -55,6 +55,8 @@ namespace IOC
 
             // unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
         }
 
     }

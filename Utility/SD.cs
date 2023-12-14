@@ -24,5 +24,7 @@ namespace Utility
         public static string AddBookBasket = "Book added to basket successfully";
         public static string BookRemovedFromDatabase = "Book removed from database";
         public static string PaymentError = "Error occured in paymet process";
+        public static string PaymentFailded = "Payment failded";
+
     }
 }

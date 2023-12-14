@@ -182,7 +182,7 @@ namespace ECommerce.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult Payment(OrderFormModel model)
+        public async Task<IActionResult> Payment(OrderFormModel model)
         {
             var url = Request.Scheme + "://" + Request.Host.Value; // redirection url after payment
 
@@ -216,12 +216,13 @@ namespace ECommerce.Controllers
             {
                 LineItems = list,
                 Mode = "payment",
-                SuccessUrl = url,
-                CancelUrl = url,
+                SuccessUrl = Url.Action("UpdateStatus", "StripeWebHook", new { iSuccess  = true}, Request.Scheme),
+                CancelUrl = Url.Action("UpdateStatus", "StripeWebHook", new { iSuccess = false}, Request.Scheme),
             };
 
             var service = new SessionService();
             Session session = service.Create(options);
+            
 
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
