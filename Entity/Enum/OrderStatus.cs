@@ -12,6 +12,7 @@ namespace Entity.Enum
         ReadyToDeliver,
         OnTheWay ,
         Delivered,
+        Refound,
         Canceled,
         Banned,
     }

@@ -5,6 +5,7 @@ using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Repository.Interface;
 using Repository.UnitOfWork;
 using Stripe.Checkout;
@@ -185,7 +186,6 @@ namespace ECommerce.Controllers
         public async Task<IActionResult> Payment(OrderFormModel model)
         {
             var url = Request.Scheme + "://" + Request.Host.Value; // redirection url after payment
-
             OrderDetails orderDetails = _mapper.Map<OrderDetails>(model);
             string userid = User.GetLoggedInUserId<string>();
             Basket basketfromdb = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending , x => x.Cards).First();
@@ -222,7 +222,9 @@ namespace ECommerce.Controllers
 
             var service = new SessionService();
             Session session = service.Create(options);
-            
+
+            string json = JsonConvert.SerializeObject(orderDetails);
+            TempData["OrderDetails"] = json;
 
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entity.EntityClass
 {
+    [Serializable]
     public class OrderDetails : BaseEntity
     {
         public int OrderId { get; set; }

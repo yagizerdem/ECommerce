@@ -25,6 +25,6 @@ namespace Utility
         public static string BookRemovedFromDatabase = "Book removed from database";
         public static string PaymentError = "Error occured in paymet process";
         public static string PaymentFailded = "Payment failded";
-
+        public static string SuccessfulPaymetn = "Successfull Payment";
     }
 }
