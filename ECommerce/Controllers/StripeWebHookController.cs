@@ -17,6 +17,8 @@ namespace ECommerce.Controllers
         private readonly IUnitOfWork unitofwork;
         private readonly UserManager<AppUser> _userManager;
         private readonly IGenericRepository<Basket> _basketRepository;
+        private readonly IGenericRepository<OrderDetails> _orderDetailsRepository;
+        private readonly IGenericRepository<Order> _orderRepository;
         public StripeWebHookController(INotyfService _notyf , IUnitOfWork unitofwork,
             UserManager<AppUser> userManager)
         {
@@ -24,6 +26,8 @@ namespace ECommerce.Controllers
             this.unitofwork = unitofwork;
             this._userManager = userManager;
             this._basketRepository = unitofwork.GetRepository<Basket>();
+            this._orderDetailsRepository = unitofwork.GetRepository<OrderDetails>();
+            this._orderRepository = unitofwork.GetRepository<Order>();
         }
         public IActionResult UpdateStatus(bool iSuccess) 
         {
@@ -47,10 +51,30 @@ namespace ECommerce.Controllers
             }
             // success paymentt
             string userid = User.GetLoggedInUserId<string>();
-            Basket? basketfromdb = _basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending).FirstOrDefault();
-            //basketfromdb.status = Entity.Enum.BasketStatus.Approved;
-            // creating new order
+            try
+            {
+                // create new order
+                Order newOrder = new Order()
+                {
+                    UserId = userid,    
+                    OrderStatus = Entity.Enum.OrderStatus.Pending,
+                };
+                _orderRepository.Add(newOrder);
+                unitofwork.Commit(); // get order id after commit
 
+                Basket? basketfromdb = _basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending).FirstOrDefault();
+                basketfromdb.status = Entity.Enum.BasketStatus.Approved;
+                orderDetails.BasketId = basketfromdb.Id;
+                orderDetails.OrderId = newOrder.Id;
+                _orderDetailsRepository.Add(orderDetails);
+                unitofwork.Commit();
+            }
+            catch (Exception ex)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+                return RedirectToAction("Index", "Home");
+            }
+            // creating new order
             _notyf.Success(SD.SuccessfulPaymetn);
             return RedirectToAction("Index", "Home"); ;
         }
