@@ -6,6 +6,9 @@
 @section Styles{
     <link rel="stylesheet" href="~/css/BookList.css"/>
 }
+@section Scripts{
+    <script src="/js/SearchBookButtonScript.js"></script>
+}
 <nav class="uk-navbar-container">
     <div class="uk-container">
         <div uk-navbar>
@@ -21,11 +24,11 @@
 
                 <ul class="uk-navbar-nav">
                     <li class="uk-active"><a>
-                            <input class="uk-input uk-form-width-medium" type="text" >
+                            <input class="uk-input uk-form-width-medium" type="text" id="searchinput" >
                     </a></li>
                     <li>
                     </li>
-                    <li><a><button class="btn btn-info search-btn">Search Book</button></a></li>
+                    <li><a><button class="btn btn-info search-btn" id="searchbutton">Search Book</button></a></li>
                 </ul>
 
             </div>
@@ -64,7 +67,7 @@ else
                 {
                     coverimgpath = book.HeaderImagePath.Replace('\\', '/').Substring(1);
                 }
-                <tr>
+                <tr class="book-row">
                     <th scope="row">@book.Id</th>
                     <td><div style="background-image:url('@coverimgpath');" class="bookcover"></div></td>
                     <td>@book.Title</td>
