@@ -122,6 +122,10 @@ namespace ECommerce.Areas.Admin.Controllers
                 return View(model);
             }
             _notyf.Success(SD.BookAddedToDatabase, 4);
+            if (User.IsInRole("Employee"))
+            {
+                return RedirectToAction("Index", "Employee" , new { area = "Employee" });
+            }
             return RedirectToAction("Index" ,"Admin");
         }
 

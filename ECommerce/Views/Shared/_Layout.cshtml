@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -39,9 +40,14 @@
         </main>
     </div>
 
-    @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin)
+    
+    @if (User.IsInRole("Admin"))
     {
         <partial name="_AdminButton" />
+    }
+    else if (User.IsInRole("Employee"))
+    {
+        <partial name="_EmployeeButton" />
     }
 
     <partial name="Footer" />

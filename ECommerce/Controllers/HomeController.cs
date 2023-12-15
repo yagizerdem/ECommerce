@@ -23,17 +23,20 @@ namespace ECommerce.Controllers
             this.bookRepository = unitofwork.GetRepository<Book>();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var userId = User.GetLoggedInUserId<string>(); // extension method 
             if(userId != null)
             {
-                var userName = User.Identity.Name;
+                var user = await _userManager.GetUserAsync(User);
+                var roles = await _userManager.GetRolesAsync(user);
 
-                ViewBag.UserName = userName;
-
-                // cheking user is admin
-                ViewBag.IsAdmin  = User.IsInRole("Admin");
+                // If the user has roles, you can use them (assuming a user has only one role in this example)
+                if (roles.Any())
+                {
+                    var roleName = roles.First(); // Assuming a user has only one role                          // Now, roleName contains the name of the role for the current user
+                    ViewBag.UserRole = roleName;
+                }
             }
             // get books 
             IEnumerable<Book> book_list = bookRepository.GetAll();

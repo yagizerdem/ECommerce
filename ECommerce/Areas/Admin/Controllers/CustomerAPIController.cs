@@ -1,5 +1,6 @@
 ﻿using DAL.dbcontext;
 using Entity.EntityClass;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace ECommerce.Areas.Admin.Controllers
     [Area("Admin")]
     [Route("Admin/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class CustomerAPIController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
