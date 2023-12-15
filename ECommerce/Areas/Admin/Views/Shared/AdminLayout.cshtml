@@ -34,11 +34,13 @@
                 <a style="animation-delay: 0.2s" href="@Url.Action("Index", "Admin" ,new { area = "Admin" })">Admin DashBoard</a>
                 <a style="animation-delay: 0.4s" href="@Url.Action("List", "Book" ,new { area = "Admin" })">Books</a>
                 <a style="animation-delay: 0.6s" href="@Url.Action("List", "User" ,new { area = "Admin" })">Users</a>
+                <a style="animation-delay: 0.8s" href="@Url.Action("List", "Shipper" ,new { area = "Admin" })">Shippers</a>
             }
             else if (User.IsInRole("Employee"))
             {
                 <a style="animation-delay: 0.2s" href="@Url.Action("Index", "Employee" ,new { area = "Employee" })">Admin DashBoard</a>
                 <a style="animation-delay: 0.4s" href="@Url.Action("List", "Book" ,new { area = "Admin" })">Books</a>
+                <a style="animation-delay: 0.6s" href="@Url.Action("List", "Shipper" ,new { area = "Admin" })">Shippers</a>
             }
 
     </nav>

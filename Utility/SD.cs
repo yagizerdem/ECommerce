@@ -32,5 +32,10 @@ namespace Utility
         public static string DeleteBookImageSuccessfull = "Book image deleted successfull";
         public static string BookUpdatedSuccessfull = "Book upadted successfull";
         public static string EnterValidData = "Enter valid data";
+        public static string ShipperAddedSuccessfull = "Shipper Added to database successfull";
+        public static string ShipperAddedFail = "Error occrued while adding shipper to database";
+        public static string ThereIsAlredyShipper = "Can note give 2 shippers same name";
+        public static string ShipperDeletedSuccess = "Shipper Deleted Successfull";
+        public static string ShipperUpdatedSuccess = "Shipper Updated Successfull";
     }
 }

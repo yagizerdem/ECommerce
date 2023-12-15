@@ -1,4 +1,5 @@
-﻿using RandomString4Net;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using RandomString4Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,9 @@ namespace Utility
             return result;
         }
 
+        public static string GenerateMini()
+        {
+            return  RandomString.GetString(Types.ALPHABET_LOWERCASE);
+        }
     }
 }

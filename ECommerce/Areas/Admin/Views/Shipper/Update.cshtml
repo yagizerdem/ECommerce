@@ -1,0 +1,41 @@
+﻿@model Entity.EntityClass.Shipper
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "AdminLayout";
+}
+
+@section Styles {
+    <style>
+        .container {
+            background: #fff;
+            display: felx !important;
+            justify-content: center !important;
+            align-items: center !important;
+            flex-direction: column !important;
+            width: 400px;
+            height: 300px;
+            border: 10px solid black;
+            border-radius: 20px;
+            margin-top: 100px;
+        }
+
+        .input-group {
+            margin-top: 20px;
+        }
+
+        label {
+            margin-top: 100px;
+        }
+    </style>
+}
+<div class="container">
+    <form method="post">
+        <label>Enter Shipper Name</label>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control"   placeholder="Enter shipper name" name="shippername">
+            <div class="input-group-append">
+            </div>
+        </div>
+        <button class="btn btn-success" type="submit">Submit</button>
+    </form>
+</div>
