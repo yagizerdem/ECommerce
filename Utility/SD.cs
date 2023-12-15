@@ -28,5 +28,9 @@ namespace Utility
         public static string SuccessfulPaymetn = "Successfull Payment";
         public static string UserAddError = "Error occured while adding user to database";
         public static string UserAddSuccessfull = "User added to database successfully";
+        public static string EnterValidBookCount = "Enter valid count of book";
+        public static string DeleteBookImageSuccessfull = "Book image deleted successfull";
+        public static string BookUpdatedSuccessfull = "Book upadted successfull";
+        public static string EnterValidData = "Enter valid data";
     }
 }

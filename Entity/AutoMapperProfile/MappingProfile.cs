@@ -16,7 +16,9 @@ namespace Entity.AutoMapperProfile
             // Add as many of these lines as you need to map your objects
             CreateMap<SingInViewModel, AppUser>();
             CreateMap<BookModel , Book>();
+            CreateMap<Book, BookModel >();
             CreateMap<OrderFormModel, OrderDetails>();
+
         }
     }
 }

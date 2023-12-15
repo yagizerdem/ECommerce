@@ -1,0 +1,128 @@
+﻿@model Entity.Models.BookModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "AdminLayout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/AddBookForm.css" />
+    <style>
+        .cover{
+            width:80px;
+            height:100px;
+            background-position:center !important;
+            background-size: cover !important;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+            justify-items:center;
+        }
+
+        /* Style for grid items (optional) */
+        .grid-item {
+            background-color: #ddd;
+            padding: 20px;
+            text-align: center;
+            margin:50px;
+        }
+
+        .customize{
+            width:150px;
+            position:relative;
+            top:100px;
+            left:-55px;
+                }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.tiny.cloud/1/qfrx42jv4dy2nje7xcg4ci09or03vn9sbu2zw2iau8e0wn6h/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/js/AddBookForm.js"></script>
+}
+
+<div class="container">
+    <form enctype="multipart/form-data" method="post" asp-action="UpdateBook" asp-controller="Book" asp-area="Admin">
+        <input type="hidden" value="@Model.Id" asp-for="@Model.Id"/>
+        <fieldset class="uk-fieldset">
+
+            <legend class="uk-legend">Enter Title</legend>
+            <div class="uk-margin">
+                <input class="uk-input" type="text" placeholder="Input" aria-label="Input" asp-for="@Model.Title">
+            </div>
+            <hr>
+            <label class="uk-legend">Enter Small Description</label>
+            <div class="uk-margin">
+                <textarea class="uk-textarea" rows="5" placeholder="Textarea" aria-label="Textarea" asp-for="@Model.SmallDescription"></textarea>
+            </div>
+            <hr>
+            <label class="uk-legend">Enter Description</label>
+            <textarea class="wsyeditor" asp-for="@Model.Description"></textarea>
+            <hr>
+            <label class="uk-legend">Price</label>
+            <br>
+            <input type="number" min="0" asp-for="@Model.Price" />
+            <hr>
+            <label class="uk-legend">Price5</label>
+            <br>
+            <input type="number" min="0" asp-for="@Model.Price5" />
+            <hr>
+            <label class="uk-legend">Price10</label>
+            <br>
+            <input type="number" min="0" asp-for="@Model.Price10" />
+            <hr>
+            <label class="uk-legend">Price20</label>
+            <br>
+            <input type="number" min="0" asp-for="@Model.Price20" />
+            <hr>
+            <label class="uk-legend">Enter Discount Amount</label>
+            <div class=wrapper>
+                <div class="range">
+                    <input type="range" min="0" max="100" value="0" id="range" asp-for="@Model.DiscountRate" />
+                    <div class="value">0</div>
+                </div>
+                <hr>
+            </div>
+            <label class="uk-legend">Enter Author Name</label>
+            <div class="uk-margin">
+                <input class="uk-input" type="text" placeholder="Author Name" aria-label="Input" asp-for="@Model.Author">
+            </div>
+            <hr>
+            <label class="uk-legend">Stock Count</label>
+            <br>
+            <input type="number" min="0" asp-for="@Model.StockCount" />
+            <br />
+            <hr />
+            <label class="uk-legend">Add Header Image</label>
+            <br>
+            <input type="file" accept=".jpeg, .jpg, .png" asp-for="@Model.HeaderImage" />
+            <hr />
+            <label class="uk-legend">Add Sub Images</label>
+            <br>
+            <input type="file" accept=".jpeg, .jpg, .png" multiple asp-for="@Model.SubImages" />
+            <hr />
+            <button type="submit" class="btn btn-success">Update Book</button>
+        </fieldset>
+    </form>
+    <br />  
+    <div>Delete Images</div>
+    <br />
+    <div class="grid-container">
+    @foreach (var imgurl in ViewBag.ImagePaths)
+    {
+        string path = "";
+        if (imgurl != null)
+        {
+            path = imgurl.Replace('\\', '/').Substring(1);
+                <div class="cover grid-item" style="background:url('@path')">
+                    <form method="post" asp-action="DeleteImage">
+                        <input name="bookid" type="hidden" value="@Model.Id" />
+                        <input name="imgpath" type="hidden" value="@imgurl" />
+                        <button class="btn-danger customize" type="submit">Delete img</button>
+                    </form>
+                </div>
+            }
+        }
+    </div>
+
+</div>

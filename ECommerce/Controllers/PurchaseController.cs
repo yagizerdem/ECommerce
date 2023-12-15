@@ -44,8 +44,9 @@ namespace ECommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToBasket([FromBody] PurchaseRequestModel purchaseRequest)
         {
-            if (purchaseRequest.Count <= 0)
+            if (purchaseRequest == null  || (purchaseRequest != null && purchaseRequest.Count <= 0))
             {
+                _notyf.Error(SD.EnterValidBookCount);
                 return BadRequest(); // 400 Bad Request
             }
             try

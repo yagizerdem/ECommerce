@@ -39,5 +39,8 @@ namespace Entity.Models
         public IFormFile HeaderImage { get; set; }
         [ValidateNever]
         public List<IFormFile> SubImages { get; set; }
+
+        [ValidateNever]
+        public int Id { get; set; } // required for updating book , binding book id for use in post action method 
     }
 }

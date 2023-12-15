@@ -23,3 +23,19 @@
         display: none !important;
     }
 }
+
+.bookcover {
+    width:80px;
+    height:100px !important;
+    background-position:center;
+    background-size:cover;
+}
+.table{
+    color:#fff !important;
+}
+.addbookbtn {
+    color: #4a5ec1;
+    border: 1px solid #c5a8a8;
+    padding: 10px;
+    background-color: #f3eaea;
+}

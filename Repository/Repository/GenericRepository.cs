@@ -1,4 +1,5 @@
 ﻿using DAL.dbcontext;
+using Entity.EntityClass;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interface;
 using System;
@@ -66,6 +67,11 @@ namespace Repository.Repository
         public void RemoveRange(IEnumerable<T> entities)
         {
             _context.Set<T>().RemoveRange(entities);
+        }
+
+        public void Update(T entity)
+        {
+            _context.Set<T>().Update(entity);
         }
     }
 }

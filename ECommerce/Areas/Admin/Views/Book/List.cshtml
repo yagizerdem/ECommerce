@@ -1,4 +1,5 @@
 ﻿@model List<Entity.EntityClass.Book> 
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "AdminLayout";
 }
@@ -12,7 +13,7 @@
             <div class="uk-navbar-left">
 
                 <ul class="uk-navbar-nav">
-                    <li class="uk-active"><a href="@Url.Action("AddBook", "Book" ,new { area = "Admin" })">Add Book</a></li>
+                    <li class="uk-active"><a href="@Url.Action("AddBook", "Book" ,new { area = "Admin" })" class="addbookbtn">Add Book</a></li>
                 </ul>
             </div>
 
@@ -38,18 +39,58 @@
 }
 else
 {
-    <div class="inner-container">
-        @foreach (var book in Model)
-        {
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">@book.Title</h5>
-                    <p class="card-text">@book.SmallDescription</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th>Book Cover Image</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Price</th>
+                <th scope="col">Price5</th>
+                <th scope="col">Price10</th>
+                <th scope="col">Price20</th>
+                <th scope="col">DiscountRate</th>
+                <th scope="col">StockCount</th>
+                <th scope="col">Delete</th>
+                <th scope="col">Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                string coverimgpath = null;
+                if (book.HeaderImagePath != null)
+                {
+                    coverimgpath = book.HeaderImagePath.Replace('\\', '/').Substring(1);
+                }
+                <tr>
+                    <th scope="row">@book.Id</th>
+                    <td><div style="background-image:url('@coverimgpath');" class="bookcover"></div></td>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Price</td>
+                    <td>@book.Price5</td>
+                    <td>@book.Price10</td>
+                    <td>@book.Price20</td>
+                    <td>@(book.DiscountRate == 0 ? "no discount" : book.DiscountRate.ToString() + " %")</td>
+                    <td>@book.StockCount</td>
+                    <td>
+                        <form method="post" asp-action="DeleteBook">
+                            <input type="text" value="@book.Id" name="bookid" hidden />
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="UpdateBook" method="get">
+                            <input type="text" value="@book.Id" name="bookid" hidden />
+                            <button class="btn btn-info" type="submit">Update</button>
+                        </form>
+                    </td>
+                </tr>
 
-        }
-    </div>
+
+            }
+        </tbody>
+    </table>
 }
