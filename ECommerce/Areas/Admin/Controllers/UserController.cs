@@ -34,9 +34,8 @@ namespace ECommerce.Areas.Admin.Controllers
         }
         public IActionResult List()
         {
-            string currentuserid = User.GetLoggedInUserId<string>();
-            List<AppUser> users = _userManager.Users.Where(x => x.Id != currentuserid).ToList();
-            return View(users);
+            // fetchin user data from api 
+            return View();
         }
         public async Task<IActionResult> AddUser() 
         {
@@ -75,6 +74,22 @@ namespace ECommerce.Areas.Admin.Controllers
             }
             _notyf.Success(SD.UserAddSuccessfull);
             return RedirectToAction("List" , "User");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            try
+            {
+                AppUser user = await _userManager.FindByIdAsync(userId);
+                await _userManager.DeleteAsync(user);
+                return Json(new { success = true, message = "User deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                return Json(new { success = false, message = "Error deleting user", error = ex.Message });
+            }
         }
     }
 }

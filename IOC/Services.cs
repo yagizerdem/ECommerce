@@ -49,14 +49,11 @@ namespace IOC
         options.SlidingExpiration = true;
         options.AccessDeniedPath = "/Home/Index";
     });
-
             // toastr notificaiton 
             services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 
             // unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-
         }
 
     }

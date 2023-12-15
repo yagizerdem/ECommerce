@@ -2,6 +2,7 @@
 using AutoMapper;
 using Entity.EntityClass;
 using Entity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
 using Repository.Interface;
@@ -13,6 +14,7 @@ using Utility;
 namespace ECommerce.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,Employee")]
     public class BookController : Controller
     {
         private readonly IUnitOfWork unitofwork;

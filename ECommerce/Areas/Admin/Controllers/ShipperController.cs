@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
 using Entity.EntityClass;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
 using Repository.UnitOfWork;
@@ -9,6 +10,7 @@ using Utility;
 namespace ECommerce.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,Employee")]
     public class ShipperController : Controller
     {
         private readonly IUnitOfWork unitofwork;
