@@ -10,7 +10,8 @@ namespace Entity.Enum
     {
         Pending,
         ReadyToDeliver,
-        OnTheWay ,
+        Approved ,
+        OnTheWay,
         Delivered,
         Refound,
         Canceled,

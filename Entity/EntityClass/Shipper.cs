@@ -8,8 +8,9 @@ namespace Entity.EntityClass
 {
     public class Shipper : BaseEntity
     {
+        
         public string ShipperName { get; set; } 
         public string ShipperCode { get; set;}
-
+        
     }
 }

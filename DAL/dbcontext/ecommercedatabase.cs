@@ -39,8 +39,6 @@ namespace DAL.dbcontext
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

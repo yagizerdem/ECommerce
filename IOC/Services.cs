@@ -54,6 +54,8 @@ namespace IOC
 
             // unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // order repository 
+            services.AddScoped<IOrderRepository, OrderRepository>();
         }
 
     }

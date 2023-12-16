@@ -271,9 +271,6 @@ namespace DAL.Migrations
                     b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShipperId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UpdatedIp")
                         .HasColumnType("int");
 
@@ -282,8 +279,6 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ShipperId");
 
                     b.HasIndex("UserId");
 
@@ -555,19 +550,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Entity.EntityClass.Order", b =>
                 {
-                    b.HasOne("Entity.EntityClass.Shipper", "Shipper")
-                        .WithMany()
-                        .HasForeignKey("ShipperId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Entity.EntityClass.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Shipper");
 
                     b.Navigation("User");
                 });

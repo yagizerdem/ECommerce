@@ -1,0 +1,34 @@
+﻿@model Entity.Models.OrderViewPageModel
+@{
+    Layout = "AdminLayout";
+}
+@section Styles{
+    <style>
+
+    </style>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">OrderId</th>
+            <th scope="col">UserName</th>
+            <th scope="col">OrderStatus</th>
+            <th scope="col">Update Order Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.orderList)
+        {
+        <tr>
+            <th scope="row">@order.Id</th>
+            <td>@order.User.UserName</td>
+            <td>
+                <form>
+
+                </form>
+            </td>
+        </tr> 
+        }
+
+    </tbody>
+</table>

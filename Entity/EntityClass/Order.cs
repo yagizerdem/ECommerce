@@ -10,8 +10,6 @@ namespace Entity.EntityClass
 {
     public class Order : BaseEntity
     {
-        public int ShipperId { get; set; }
-        public Shipper Shipper { get; set; }
         public List<OrderDetails> OrderDetails{ get; set; }
         public string UserId { get; set; }
         [Required]
