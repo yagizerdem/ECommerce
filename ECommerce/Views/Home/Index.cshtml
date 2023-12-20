@@ -142,8 +142,8 @@
                     
                  </div>
                      <div class="bottom">
-                        <input type="text" class="chat-input" />
-                        <button class="btn btn-success">Send Comment</button>
+                        <input type="text" class="chat-input" id="chat-input" />
+                            <button class="btn btn-success" onclick="SendChatToServer()">Send Comment</button>
                     </div>
 
 
@@ -164,6 +164,30 @@
             $("#commnetscontainer").remove();
 
     }
+
+    // ajax
+    function SendChatToServer() {
+        const inputData = $("#chat-input").val();
+
+        $.ajax({
+            method: "POST",
+            url: "/Home/HandleChatInput",
+            dataType: "json",
+            data: { inputData: inputData },  // Send the plain string directly
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.responseText)
+                } else {
+                    // DoSomethingElse()
+                    toastr.error(response.responseText)
+                }
+            },
+            error: function (response) {
+                toastr.error("Internal Errro")
+            }
+        });
+    }
+   
 
 
 </script>

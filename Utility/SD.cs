@@ -41,5 +41,6 @@ namespace Utility
 
         public static string OrderApproved = "Order approved";
         public static string OrderStausUpdated = "Order status updated";
+        public static string UserProfileCreatedSuccessfull = "User profile created successfull";
     }
 }

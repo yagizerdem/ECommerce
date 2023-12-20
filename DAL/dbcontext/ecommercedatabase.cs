@@ -24,6 +24,9 @@ namespace DAL.dbcontext
         public DbSet<Order> Orders { get; set; }
         public DbSet<Shipper> Shippers { get; set; }
 
+        public DbSet<Comment> Commnets { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
