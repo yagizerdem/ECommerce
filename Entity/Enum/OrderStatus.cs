@@ -9,8 +9,7 @@ namespace Entity.Enum
     public enum OrderStatus
     {
         Pending,
-        ReadyToDeliver,
-        Approved ,
+        Approved,
         OnTheWay,
         Delivered,
         Refound,

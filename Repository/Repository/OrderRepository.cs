@@ -5,6 +5,7 @@ using Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,9 +19,14 @@ namespace Repository.Repository
             this._context = _context;
         }
 
-        public List<Order> GetAllOrdersWithUsersAndDetails()
+        public List<Order> GetAllOrdersWithUsersAndDetails(Expression<Func<Order, bool>> expression = null)
         {
-           return _context.Orders.Include(x => x.OrderDetails).Include(x=>x.User).ToList();
+            var query = _context.Set<Order>().AsQueryable();
+            if (expression != null)
+            {
+               query = query.Where(expression);
+            }
+           return query.Include(x => x.OrderDetails).Include(x=>x.User).ToList();
         }
     }
 }

@@ -38,5 +38,7 @@ namespace Utility
         public static string ShipperDeletedSuccess = "Shipper Deleted Successfull";
         public static string ShipperUpdatedSuccess = "Shipper Updated Successfull";
         public static string StockExeeded = "Requested amount of book exeed stock amount";
+
+        public static string OrderApproved = "Order approved";
     }
 }
