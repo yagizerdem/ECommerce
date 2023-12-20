@@ -100,6 +100,9 @@
             <tr>
                 <td>Price 20 : @Model.Price20 </td>
             </tr>
+            <tr>
+                <td>Stock Count : @Model.StockCount</td>
+            </tr>
             @if (Model.DiscountRate  != 0 )
             {
                 <tr>
@@ -107,11 +110,17 @@
                 </tr>
             }
             <tr>
-                <form>
-                    <input   type="hidden"/>
-                    <td><input type="number" min="1" id="count" placeholder="Count"/></td>
-                <td><a class="btn" id="submitbutton">Buy Book</a></td>
-                </form>
+                @if(Model.StockCount > 0){
+                    <form>
+                        <input type="hidden" />
+                    <td><input type="number" min="1" id="count" placeholder="Count" max="@Model.StockCount" style="width:200px;"/></td>
+                    <td><a class="btn" id="submitbutton">Buy Book</a></td>
+                    </form>
+                }
+                else
+                {
+                    <td style="font-size:20px;font-weight:bolder">Sold Out!</td>
+                }
             </tr>
         </table>
     </div>

@@ -19,6 +19,7 @@ namespace ECommerce.Controllers
         private readonly IGenericRepository<Basket> _basketRepository;
         private readonly IGenericRepository<OrderDetails> _orderDetailsRepository;
         private readonly IGenericRepository<Order> _orderRepository;
+        private readonly IGenericRepository<Book> _bookRepository;
         public StripeWebHookController(INotyfService _notyf , IUnitOfWork unitofwork,
             UserManager<AppUser> userManager)
         {
@@ -28,6 +29,7 @@ namespace ECommerce.Controllers
             this._basketRepository = unitofwork.GetRepository<Basket>();
             this._orderDetailsRepository = unitofwork.GetRepository<OrderDetails>();
             this._orderRepository = unitofwork.GetRepository<Order>();
+            this._bookRepository = unitofwork.GetRepository<Book>();
         }
         public IActionResult UpdateStatus(bool iSuccess) 
         {
@@ -41,7 +43,9 @@ namespace ECommerce.Controllers
         public IActionResult UpdatePaymentStatus()
         {
             string? json = (string)TempData["ForwardOrderDetails"];
+            string userid = User.GetLoggedInUserId<string>();
             OrderDetails orderDetails = JsonConvert.DeserializeObject<OrderDetails>(json);
+            Basket? basketfromdb = _basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending , x => x.Cards).FirstOrDefault();
 
             bool isSuccessful = (bool)TempData["IsSuccessful"];
             if (isSuccessful == false)
@@ -49,8 +53,22 @@ namespace ECommerce.Controllers
                 _notyf.Error(SD.PaymentFailded);
                 return RedirectToAction("Index", "Home");
             }
+            // decreasing book count 
+            try
+            {
+                foreach (var card in basketfromdb.Cards)
+                {
+                    Book bookfromdb = _bookRepository.GetById(card.BookId);
+                    bookfromdb.StockCount -= card.BookCount;
+                }
+                unitofwork.Commit();
+            }catch(Exception e)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+                return RedirectToAction("Index", "Home");
+            }
             // success paymentt
-            string userid = User.GetLoggedInUserId<string>();
+
             try
             {
                 // create new order
@@ -62,7 +80,6 @@ namespace ECommerce.Controllers
                 _orderRepository.Add(newOrder);
                 unitofwork.Commit(); // get order id after commit
 
-                Basket? basketfromdb = _basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending).FirstOrDefault();
                 basketfromdb.status = Entity.Enum.BasketStatus.Approved;
                 orderDetails.BasketId = basketfromdb.Id;
                 orderDetails.OrderId = newOrder.Id;

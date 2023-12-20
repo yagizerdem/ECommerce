@@ -44,17 +44,21 @@ namespace ECommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToBasket([FromBody] PurchaseRequestModel purchaseRequest)
         {
+            string userid = User.GetLoggedInUserId<string>();
+            Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
+            Book book = bookRepository.GetById(purchaseRequest.BookId);
             if (purchaseRequest == null  || (purchaseRequest != null && purchaseRequest.Count <= 0))
             {
-                _notyf.Error(SD.EnterValidBookCount);
+                return BadRequest(); // 400 Bad Request
+            }
+            if (purchaseRequest.Count > book.StockCount)
+            {
                 return BadRequest(); // 400 Bad Request
             }
             try
             {
                 // implement logic card - basket logic
-                string userid = User.GetLoggedInUserId<string>();
-                Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
-                Book book = bookRepository.GetById(purchaseRequest.BookId);
+
                 if (basket == null)
                 {
                     basket = new Basket()
