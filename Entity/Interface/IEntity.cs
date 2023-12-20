@@ -10,9 +10,9 @@ namespace Entity.Interface
     {
         public int Id { get; set; } 
         
-        public int CreatedIp { get; set; }
+        public string CreatedIp { get; set; }
 
-        public int UpdatedIp { get; set; }
+        public string UpdatedIp { get; set; }
 
         public DateTime CreateDate { get; set; }
     }

@@ -24,7 +24,7 @@ namespace ECommerce.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {
+        {            
             var userId = User.GetLoggedInUserId<string>(); // extension method 
             if(userId != null)
             {

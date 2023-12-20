@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Entity\Entity.csproj" />
+    <ProjectReference Include="..\IOC\IOC.csproj" />
   </ItemGroup>
 
 </Project>
