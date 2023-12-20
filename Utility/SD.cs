@@ -40,5 +40,6 @@ namespace Utility
         public static string StockExeeded = "Requested amount of book exeed stock amount";
 
         public static string OrderApproved = "Order approved";
+        public static string OrderStausUpdated = "Order status updated";
     }
 }

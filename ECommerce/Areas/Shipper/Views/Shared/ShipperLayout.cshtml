@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<Entity.EntityClass.AppUser> UserManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/AdminLayout.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+
+
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    
+  <button class="burger" onclick="toggleMenu()"></button>
+  <div class="menu">
+    <nav>
+      <!-- <a href="#" style="animation-delay: 0.2s">About</a>
+      <a href="#" style="animation-delay: 0.3s">Portfolio</a>
+      <a href="#" style="animation-delay: 0.4s">Services</a>
+      <a href="#" style="animation-delay: 0.5s">Contact</a> -->
+            @if (User.IsInRole("Shipper"))
+            {
+                <a style="animation-delay: 0.2s" href="@Url.Action("Index", "ShipperHome" ,new { area = "Shipper" })">Shipper DashBoard</a>
+                <a style="animation-delay: 0.4s" href="@Url.Action("ListApprovedOrders", "Order" ,new { area = "Shipper" })">Approved Orders</a>
+                <a style="animation-delay: 0.6s" href="@Url.Action("ListOnTheWayOrders", "Order" ,new { area = "Shipper" })">Order that currently delivering</a>
+            }
+
+
+    </nav>
+  </div>
+    <button class="HomePageButton" onclick="location.href='@Url.Action("Index", "Home" ,new { area = "" })'">Go to Home Page</button>
+
+  <div class="container-md">
+        @RenderBody()
+  </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/AdminLayout.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    @await Component.InvokeAsync("Notyf")
+</body>
+</html>

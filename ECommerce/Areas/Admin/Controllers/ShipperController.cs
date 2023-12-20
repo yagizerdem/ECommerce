@@ -1,11 +1,11 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
-using Entity.EntityClass;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
 using Repository.UnitOfWork;
 using Utility;
+using Entity.EntityClass;
 
 namespace ECommerce.Areas.Admin.Controllers
 {
@@ -14,20 +14,20 @@ namespace ECommerce.Areas.Admin.Controllers
     public class ShipperController : Controller
     {
         private readonly IUnitOfWork unitofwork;
-        private readonly IGenericRepository<Shipper> shipperRepository;
+        private readonly IGenericRepository<Entity.EntityClass.Shipper> shipperRepository;
         private readonly INotyfService _notyf;
         private readonly IMapper _mapper;
 
         public ShipperController(IUnitOfWork unitOfWork, INotyfService _notyf, IMapper _mapper)
         {
             unitofwork = unitOfWork;
-            shipperRepository = unitofwork.GetRepository<Shipper>();
+            shipperRepository = unitofwork.GetRepository<Entity.EntityClass.Shipper>();
             this._notyf = _notyf;
             this._mapper = _mapper;
         }
         public IActionResult List()
         {
-            List<Shipper> list = (List<Shipper>)shipperRepository.GetAll();
+            List<Entity.EntityClass.Shipper> list = (List<Entity.EntityClass.Shipper>)shipperRepository.GetAll();
             return View(list);
         }
 
@@ -47,7 +47,7 @@ namespace ECommerce.Areas.Admin.Controllers
                     return RedirectToAction("List", "Shipper", new { area = "Admin" });
                 }
                 // go to db here
-                Shipper shipper = new Shipper()
+                Entity.EntityClass.Shipper shipper = new Entity.EntityClass.Shipper()
                 {
                     ShipperName = shippername,
                     ShipperCode = RandomStringGenerator.GenerateMini(),
@@ -68,7 +68,7 @@ namespace ECommerce.Areas.Admin.Controllers
         {
             try
             {
-                Shipper shipperformdb = shipperRepository.GetById(shipperid);
+                Entity.EntityClass.Shipper shipperformdb = shipperRepository.GetById(shipperid);
                 shipperRepository.Remove(shipperformdb); // delte enityt form db compeletely
                 unitofwork.Commit();
             }
@@ -84,7 +84,7 @@ namespace ECommerce.Areas.Admin.Controllers
         
         public IActionResult Update(int shipperid)
         {
-            Shipper shipper = shipperRepository.GetById(shipperid);
+            Entity.EntityClass.Shipper shipper = shipperRepository.GetById(shipperid);
             TempData["shipperid"] = shipper.Id;
             return View(shipper);
         }
@@ -95,7 +95,7 @@ namespace ECommerce.Areas.Admin.Controllers
             int shipperid = (int)TempData["shipperid"];
             try
             {
-                Shipper shipperformdb = shipperRepository.GetById(shipperid);
+                Entity.EntityClass.Shipper shipperformdb = shipperRepository.GetById(shipperid);
                 shipperformdb.ShipperName = shippername;
                 shipperRepository.Update(shipperformdb);
                 unitofwork.Commit();

@@ -49,6 +49,10 @@
     {
         <partial name="_EmployeeButton" />
     }
+    else if (User.IsInRole("Shipper"))
+    {
+        <partial name="_ShipperButton" />
+    }
 
     <partial name="Footer" />
 

@@ -35,10 +35,14 @@
             <td>@order.User.UserName</td>
                 <td>@order.OrderStatus</td>
             <td class="button-actions">
-                    <form method="post" asp-action="ApproveOrder">
-                        <input type="hidden" value="@order.Id" name="orderid"/>
-                    <button class="btn btn-success" type="submit">Approve</button>
-                </form>
+                    @if (order.OrderStatus == Entity.Enum.OrderStatus.Pending)
+                    {
+                        <form method="post" asp-action="ApproveOrder">
+                            <input type="hidden" value="@order.Id" name="orderid" />
+                            <button class="btn btn-success" type="submit">Approve</button>
+                        </form>
+                    }
+
                     <form>
                         <button class="btn btn-warning">Cancel</button>
                     </form>

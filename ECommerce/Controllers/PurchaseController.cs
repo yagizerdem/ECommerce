@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NuGet.ContentModel;
 using Repository.Interface;
 using Repository.UnitOfWork;
 using Stripe.Checkout;
+using System.Net;
 using Utility;
 
 namespace ECommerce.Controllers
@@ -46,6 +48,18 @@ namespace ECommerce.Controllers
         {
             string userid = User.GetLoggedInUserId<string>();
             Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
+
+
+            // cheking book amoutn exeeds in database 
+            foreach (var card in basket.Cards)
+            {
+                Book bookfromdb = bookRepository.GetById(card.BookId);
+                if (bookfromdb.StockCount < card.BookCount)
+                {
+                    return BadRequest(); // ajax ll handle the response and view 
+                }
+            }
+
             Book book = bookRepository.GetById(purchaseRequest.BookId);
             if (purchaseRequest == null  || (purchaseRequest != null && purchaseRequest.Count <= 0))
             {
@@ -127,11 +141,25 @@ namespace ECommerce.Controllers
         [HttpPost]
         public IActionResult AddSingleBook(int bookId)
         {
+
             try
             {
                 string userid = User.GetLoggedInUserId<string>();
                 Basket? basket = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending, x => x.Cards).FirstOrDefault();
                 Book book = bookRepository.GetById(bookId);
+
+
+                // cheking book amoutn exeeds in database 
+                foreach (var card in basket.Cards)
+                {
+                    Book bookfromdb = bookRepository.GetById(card.BookId);
+                    if (bookfromdb.StockCount <= card.BookCount)
+                    {
+                        _notyf.Error(SD.EnterValidBookCount);
+                        return RedirectToAction("Basket"); 
+                    }
+                }
+
                 foreach (var card in basket.Cards)
                 {
                     if (card.BookId == bookId)
@@ -194,6 +222,8 @@ namespace ECommerce.Controllers
             OrderDetails orderDetails = _mapper.Map<OrderDetails>(model);
             string userid = User.GetLoggedInUserId<string>();
             Basket basketfromdb = basketRepository.Find(x => x.UserId == userid && x.status == Entity.Enum.BasketStatus.Pending , x => x.Cards).First();
+
+
 
             // creatgin list of books for paymetn
             List<Stripe.Checkout.SessionLineItemOptions> list = new List<Stripe.Checkout.SessionLineItemOptions>();

@@ -46,6 +46,7 @@ namespace ECommerce.Areas.Admin.Controllers
             {
                 Order order = _genericOrderRepository.GetById(orderid);
                 order.OrderStatus = Entity.Enum.OrderStatus.Approved;
+                unitofwork.Commit();
                 _notyf.Success(SD.OrderApproved);
             }
             catch(Exception ex)

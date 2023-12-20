@@ -1,0 +1,49 @@
+﻿@model List<Entity.EntityClass.Order>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "ShipperLayout";
+}
+@section Styles{
+    <style>
+        .table{
+            background:#fff;
+            margin-top:50px;
+        }
+        .table  td , .table  th {
+            text-align:center;
+        }
+    </style>
+}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Order Id</th>
+                <th scope="col">User Id</th>
+                <th scope="col">User Name</th>
+                <th scope="col">Update Status (On The Way)</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <th scope="row">@order.Id</th>
+                <td>@order.UserId</td>
+                <td>@order.User.FirstName</td>
+                <td>
+                    <form asp-action="UpdateOrderStatus" method="post">
+                        <input type="number" hidden value="@order.Id" name="orderId" />
+                        <input type="text" name="orderStatus"  value="@Entity.Enum.OrderStatus.OnTheWay" hidden/>
+                        <button class="btn btn-success" type="submit">Update Status</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+
+
+
