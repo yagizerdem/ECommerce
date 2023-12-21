@@ -19,6 +19,7 @@ namespace ECommerce.Controllers
         private readonly IWebHostEnvironment _webhostenv;
         private readonly UserManager<AppUser> _userManager;
         private readonly IGenericRepository<Entity.EntityClass.Comment> _commentRepository;
+        private readonly IGenericRepository<Entity.EntityClass.Order> _orderRepository;
         public UserProfileController(IUnitOfWork unitOfWork, INotyfService _notyf , 
             IWebHostEnvironment _webhostenv , UserManager<AppUser> _userManager )
         {
@@ -28,6 +29,7 @@ namespace ECommerce.Controllers
             this._webhostenv = _webhostenv;
             this._userManager = _userManager;
             this._commentRepository = _unitOfWork.GetRepository<Comment>();
+            this._orderRepository = _unitOfWork.GetRepository<Order>();
         }
         [HttpPost]
         public IActionResult CreateUserProfile()
@@ -65,7 +67,9 @@ namespace ECommerce.Controllers
                 }
                 model.userProfile = userProfile;
                 List<Comment> comments = _commentRepository.Find(x => x.UserProfileId == userProfile.Id).ToList();
+                List<Order> allOrders = _orderRepository.Find(x => x.UserId == userId, x => x.OrderDetails).ToList();
                 model.comments = comments;
+                model.orders = allOrders;
             }
             catch (Exception ex)
             {

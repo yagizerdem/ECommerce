@@ -23,5 +23,7 @@ namespace Entity.EntityClass
 
         public string? PhoneNumber { get; set; }
         public string Email { get; set; }
+
+        public double TotalPrice { get; set; }
     }
 }

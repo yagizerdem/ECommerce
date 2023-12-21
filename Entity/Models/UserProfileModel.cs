@@ -11,5 +11,7 @@ namespace Entity.Models
     {
         public UserProfile userProfile {  get; set; }
         public List<Comment> comments { get; set; }
+
+        public List<Order> orders { get; set; }
     }
 }

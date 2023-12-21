@@ -1,4 +1,5 @@
-﻿@model UserProfileModel 
+﻿@using Entity.EntityClass
+@model UserProfileModel 
 
 @section Styles{
     <link rel="stylesheet" href="~/css/UserProfileHome.css"/>
@@ -56,5 +57,36 @@
         }
     </div>
     <div class="item">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">OrderId</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (Order order in Model.orders )
+                {
+                    <tr>
+                        <th scope="row">@order.Id</th>
+                        <td>
+
+                            @{
+                                double total_price = 0;
+                                foreach (var orderDetail in order.OrderDetails)
+                                {
+                                    total_price += orderDetail.TotalPrice;
+                                }
+                            }
+                            @total_price;
+                        </td>
+
+                        <td>@order.OrderStatus</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

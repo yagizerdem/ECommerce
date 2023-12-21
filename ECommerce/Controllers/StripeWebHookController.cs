@@ -83,6 +83,7 @@ namespace ECommerce.Controllers
                 basketfromdb.status = Entity.Enum.BasketStatus.Approved;
                 orderDetails.BasketId = basketfromdb.Id;
                 orderDetails.OrderId = newOrder.Id;
+                orderDetails.TotalPrice = basketfromdb.TotoalPrice;
                 _orderDetailsRepository.Add(orderDetails);
                 unitofwork.Commit();
             }
