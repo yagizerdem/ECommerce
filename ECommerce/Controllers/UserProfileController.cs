@@ -42,6 +42,11 @@ namespace ECommerce.Controllers
             return RedirectToAction("Index", "Home");
         }
         
-    
+        public IActionResult UserProfileHomePage()
+        {
+            ;
+            return View();
+        }
+
     }
 }

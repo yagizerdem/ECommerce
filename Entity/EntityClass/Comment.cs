@@ -11,6 +11,9 @@ namespace Entity.EntityClass
         public int UserProfileId { get; set; }
         public UserProfile UserProfile { get; set; }
         
+        public int BookId { get; set; }
+        public Book  Book { get; set; }
+
         public string Message { get; set; }
     }
 }

@@ -11,11 +11,8 @@ namespace Entity.EntityClass
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         
-        public UserProfile() { }
-
         public string? ProfileImgPath { get; set; }
 
-        public List<Comment> Comments { get; set; }
 
     }
 }

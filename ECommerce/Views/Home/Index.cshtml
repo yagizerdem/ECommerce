@@ -19,6 +19,23 @@
             font-size:20px;
             font-weight:bolder;
         }
+
+        .profile-img-background{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            border:3px solid black;
+            display:inline-block;
+            float:left;
+        }
+
+        .profile-img-background + div{
+                display: inline-block;
+                overflow: hidden;
+                overflow-wrap: break-word;
+                width: 100%;
+        }
+
     </style>
 }
 <link rel="stylesheet" href="./css/Home.css"/>
@@ -51,7 +68,7 @@
             </div>
             <div class="card-row">
                 <a class="uk-button uk-button-default" asp-action="DetailsPage" asp-controller="Home" asp-route-bookid ="@book.Id">Inspect Book</a>
-                <a class="uk-button uk-button-default commentbutton">Comments</a>
+                <a class="uk-button uk-button-default commentbutton" bookId ="@book.Id">Comments</a>
                 @* <a class="uk-button uk-button-default" asp-action="Comments" asp-controller="Home" asp-route-bookid="@book.Id">Comments</a> *@
             </div>
         </div>
@@ -127,7 +144,10 @@
     }
 </style>
 <script>
-
+    // variables
+    var selectedBookId = null;
+    var skipCounter = 0;
+    //
     const background = `
             <div class="dark-background" id="dark-background">
 
@@ -138,12 +158,13 @@
                         </button>
                  
                  <div class="screen">
-                    <div class="chat">lorem ipsum amen</div>
+
                     
                  </div>
                      <div class="bottom">
                         <input type="text" class="chat-input" id="chat-input" />
                             <button class="btn btn-success" onclick="SendChatToServer()">Send Comment</button>
+                                    <button class="btn btn-info" onclick="LoadComments()">Load More</button>
                     </div>
 
 
@@ -153,6 +174,8 @@
     const commentbtn = $(".commentbutton")
     commentbtn.each(function () {
          $(this).on("click", () => {
+            selectedBookId = $(this).attr("bookId")
+            console.log(selectedBookId)
             $("body").append(background); // Corrected variable name
 
          })
@@ -162,18 +185,19 @@
 
             $("#dark-background").remove();
             $("#commnetscontainer").remove();
-
+        skipCounter = 0;
+        selectedBookId= null
     }
 
     // ajax
     function SendChatToServer() {
         const inputData = $("#chat-input").val();
-
+        
         $.ajax({
             method: "POST",
             url: "/Home/HandleChatInput",
             dataType: "json",
-            data: { inputData: inputData },  // Send the plain string directly
+            data: { inputData: inputData , bookId : selectedBookId},  // Send the plain string directly
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.responseText)
@@ -183,11 +207,51 @@
                 }
             },
             error: function (response) {
-                toastr.error("Internal Errro")
+                toastr.error("Internal Error")
             }
         });
     }
    
+    // ajax
+    function LoadComments(){
+        $.ajax({
+            method: "POST",
+            url: "/Home/Comments",
+            dataType: "json",
+            data: { skip: skipCounter, bookId: selectedBookId },  // Send the plain string directly
+            success: function (comments) {
+                if (comments.success == false) {
+                    toastr.error("no comments left")
+                }else{
+                    // Handle the comments received in the response
+                    console.log("Comments:", comments);
+                    skipCounter++;
+                    Print(comments)
+                }
+
+                // You can update your UI with the received data
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error("Error getting comments:", xhr.responseText);
+            }
+        });
+    }
 
 
+    // print data to screen
+    function Print(jsonobj) {
+        for(var obj of jsonobj){
+            const imgpath = obj.userProfile.profileImgPath
+            const anonimous = '@(Utility.SD.AnonimUserProfileImgPath.ToString())'
+            const template = `<div class="chat">
+                     <img class="profile-img-background" src="${imgpath != null ? imgpath : anonimous}"></img>
+                        <div>
+                            ${obj.message}
+                        </div>
+                     </div>
+                                   
+            `
+            document.getElementsByClassName("screen")[0].innerHTML += template;
+        }
+    }
 </script>

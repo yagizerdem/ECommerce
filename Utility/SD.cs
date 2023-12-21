@@ -42,5 +42,8 @@ namespace Utility
         public static string OrderApproved = "Order approved";
         public static string OrderStausUpdated = "Order status updated";
         public static string UserProfileCreatedSuccessfull = "User profile created successfull";
+
+        public static string AnonimUserProfileImgPath = "https://psgpharma.ac.in/wp-content/uploads/2019/02/empty-img.jpg";
+
     }
 }
