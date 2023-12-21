@@ -47,16 +47,6 @@ namespace ECommerce.Controllers
             // get books 
             IEnumerable<Book> book_list = bookRepository.GetAll();
 
-            // finding user proile 
-            //UserProfile? userProfile = userProfileRepository.Find(x => x.AppUserId == userId , x=>x.AppUser).FirstOrDefault();
-            //if(userProfile != null)
-            //{
-            //    ViewBag.userProfile = userProfile;
-            //}
-            //else
-            //{
-            //    ViewBag.userProfile = null;
-            //}
             return View(book_list);
         }
 

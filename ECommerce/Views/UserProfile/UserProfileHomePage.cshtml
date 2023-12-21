@@ -39,6 +39,21 @@
 
     </div>
     <div class="item">
+        <h3 class="message-header" style="text-align:center;">Previous Messages</h3>
+        @foreach(Entity.EntityClass.Comment comment in Model.comments)
+        {
+
+                <div class="user-comments">
+                    @comment.Message
+                <form method="post" asp-action="DeleteChatMessage">
+                    <input type="hidden" name="chatId" value="@comment.Id" />
+                    <button type="submit" class="delte-button btn btn-danger">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </form>
+                </div>
+
+        }
     </div>
     <div class="item">
     </div>

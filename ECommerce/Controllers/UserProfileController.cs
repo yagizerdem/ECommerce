@@ -18,13 +18,16 @@ namespace ECommerce.Controllers
         private readonly INotyfService _notyf;
         private readonly IWebHostEnvironment _webhostenv;
         private readonly UserManager<AppUser> _userManager;
-        public UserProfileController(IUnitOfWork unitOfWork, INotyfService _notyf , IWebHostEnvironment _webhostenv , UserManager<AppUser> _userManager)
+        private readonly IGenericRepository<Entity.EntityClass.Comment> _commentRepository;
+        public UserProfileController(IUnitOfWork unitOfWork, INotyfService _notyf , 
+            IWebHostEnvironment _webhostenv , UserManager<AppUser> _userManager )
         {
             this._notyf = _notyf;
             this._unitOfWork = unitOfWork;  
             this.userProfileRepository = _unitOfWork.GetRepository<UserProfile>();
             this._webhostenv = _webhostenv;
             this._userManager = _userManager;
+            this._commentRepository = _unitOfWork.GetRepository<Comment>();
         }
         [HttpPost]
         public IActionResult CreateUserProfile()
@@ -61,6 +64,8 @@ namespace ECommerce.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 model.userProfile = userProfile;
+                List<Comment> comments = _commentRepository.Find(x => x.UserProfileId == userProfile.Id).ToList();
+                model.comments = comments;
             }
             catch (Exception ex)
             {
@@ -99,5 +104,22 @@ namespace ECommerce.Controllers
             return RedirectToAction(nameof(UserProfileHomePage));
         }
 
+        [HttpPost]
+        public IActionResult DeleteChatMessage(int chatId)
+        {
+            try
+            {
+                Comment comment = _commentRepository.GetById(chatId);
+                _commentRepository.Remove(comment);
+                _unitOfWork.Commit();
+                _notyf.Success("Comment Deleted Successfull");
+            }
+            catch(Exception ex) 
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+            }
+
+            return RedirectToAction(nameof(UserProfileHomePage));
+        }
     }
 }

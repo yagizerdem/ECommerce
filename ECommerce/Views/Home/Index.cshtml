@@ -241,10 +241,18 @@
     // print data to screen
     function Print(jsonobj) {
         for(var obj of jsonobj){
-            const imgpath = obj.userProfile.profileImgPath
+            let imagePath = obj.userProfile.profileImgPath;
+
+            if (imagePath != null || imagePath != undefined) {
+                // Remove the first character
+                imagePath = imagePath.substring(1);
+
+                // Replace backslashes with forward slashes
+                imagePath = imagePath.replace(/\\/g, '/');
+            }
             const anonimous = '@(Utility.SD.AnonimUserProfileImgPath.ToString())'
             const template = `<div class="chat">
-                     <img class="profile-img-background" src="${imgpath != null ? imgpath : anonimous}"></img>
+                             <img class="profile-img-background" src="${imagePath != null ? imagePath : anonimous}"></img>
                         <div>
                             ${obj.message}
                         </div>

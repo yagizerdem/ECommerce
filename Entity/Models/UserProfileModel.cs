@@ -10,6 +10,6 @@ namespace Entity.Models
     public class UserProfileModel
     {
         public UserProfile userProfile {  get; set; }
-
+        public List<Comment> comments { get; set; }
     }
 }
