@@ -27,6 +27,7 @@ namespace ECommerce.Controllers
         private readonly IGenericRepository<Entity.EntityClass.Card> cardRepository;
         private readonly IGenericRepository<Basket> basketRepository;
         private readonly IGenericRepository<Book> bookRepository;
+        private readonly IGenericRepository<Order> _orderRepository;
         public PurchaseController(
             UserManager<AppUser> _userManager, IMapper mapper,
             SignInManager<AppUser> signInManager, INotyfService _notyf,
@@ -42,6 +43,7 @@ namespace ECommerce.Controllers
             this.basketRepository = unitofwork.GetRepository<Basket>();
             this.bookRepository = unitofwork.GetRepository<Book>();
             this.env = env;
+            this._orderRepository = unitofwork.GetRepository<Order>();
         }
         [HttpPost]
         public async Task<IActionResult> AddToBasket([FromBody] PurchaseRequestModel purchaseRequest)
@@ -51,12 +53,15 @@ namespace ECommerce.Controllers
 
 
             // cheking book amoutn exeeds in database 
-            foreach (var card in basket.Cards)
+            if(basket != null)
             {
-                Book bookfromdb = bookRepository.GetById(card.BookId);
-                if (bookfromdb.StockCount < card.BookCount)
+                foreach (var card in basket.Cards)
                 {
-                    return BadRequest(); // ajax ll handle the response and view 
+                    Book bookfromdb = bookRepository.GetById(card.BookId);
+                    if (bookfromdb.StockCount < card.BookCount)
+                    {
+                        return BadRequest(); // ajax ll handle the response and view 
+                    }
                 }
             }
 
@@ -264,6 +269,41 @@ namespace ECommerce.Controllers
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
         }
+
+        // refuond book 
+        [HttpPost]
+        public IActionResult Refound(int OrderId)
+        {
+            double moneyRefound = 0;
+            try
+            {
+                Order order = _orderRepository.GetById(OrderId , x=> x.OrderDetails);
+                List<Entity.EntityClass.Basket> basketList = new List<Basket>();
+                foreach (var orderdetail in order.OrderDetails)
+                {
+                    Basket basketFromdb = basketRepository.GetById(orderdetail.BasketId , x=>x.Cards);
+                    basketList.Add(basketFromdb);
+                    moneyRefound += basketFromdb.TotoalPrice;
+                }
+                foreach (var basket in basketList)
+                {
+                    foreach (Card cardFromdb in basket.Cards)
+                    {
+                        Book book = bookRepository.GetById(cardFromdb.BookId);
+                        book.StockCount += cardFromdb.BookCount;
+                    }
+                }
+                order.OrderStatus = Entity.Enum.OrderStatus.Refound;
+                unitofwork.Commit();
+                _notyf.Success("Successfully refound book");
+            }
+            catch (Exception ex)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+            }
+            return RedirectToAction("UserProfileHomePage" , "UserProfile");
+        }
+
 
         // helper methods
         public static double CalculateTotalBookPrice(Book book, int BookCount)

@@ -89,4 +89,94 @@
             </tbody>
         </table>
     </div>
+    <div class="item">
+        <h4 style="text-align:center">
+            Refound book
+        </h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">OrderId</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Refound</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (Order order in Model.orders)
+                {
+                    if (!(order.OrderStatus == Entity.Enum.OrderStatus.Pending ||
+                    order.OrderStatus == Entity.Enum.OrderStatus.Approved
+                    )) continue; // only approved and pending entityes can refound
+                    <tr>
+                        <th scope="row">@order.Id</th>
+                        <td>
+
+                            @{
+                                double total_price = 0;
+                                foreach (var orderDetail in order.OrderDetails)
+                                {
+                                    total_price += orderDetail.TotalPrice;
+                                }
+                            }
+                            @total_price;
+                        </td>
+
+                        <td>@order.OrderStatus</td>
+                        <td>
+                            <form asp-action="Refound" asp-controller="Purchase" method="post">
+                                <input type="hidden" name="OrderId" value="@order.Id" />
+                                <button class="btn btn-danger" type="submit">Refound</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="item">
+        <h4 style="text-align:center">
+            Start Live chat with employee
+        </h4>
+        <button class="btn btn-warning" style="display:block; margin:auto;">Start</button>
+    </div>
 </div>
+
+
+@* signal r scripts  *@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+<script>
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chatHub")
+        .build();
+
+    // Handle received messages
+    connection.on("ReceiveMessage", (message) => {
+        console.log("Received message:", message);
+        // Handle the message as needed
+    });
+
+    // Start the connection
+    connection.start()
+        .then(() => {
+            // Connection established
+            console.log("Connected to the hub");
+
+            // Example: Send a private message to another user after the connection is established
+            sendPrivateMessage(userId, "Hello, World!");
+        })
+        .catch(err => console.error("Error starting connection:", err));
+
+    // Function to send a private message to another user
+    function sendPrivateMessage(userId, message) {
+        if (connection.state === signalR.HubConnectionState.Connected) {
+            connection.invoke("SendPrivateMessage", userId, message)
+                .catch(err => console.error("Error sending message:", err));
+        } else {
+            console.warn("Connection is not in the 'Connected' state. Message not sent.");
+        }
+    }
+    sendPrivateMessage("99d3d881-e6b3-4750-b863-2ab48721e217" , "test message from admin to cutomer")
+</script>

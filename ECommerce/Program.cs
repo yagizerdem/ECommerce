@@ -52,6 +52,7 @@ namespace ECommerce
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub.ChatHub>("/chatHub");
             });
             app.Run();
 

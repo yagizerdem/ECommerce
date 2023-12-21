@@ -70,6 +70,7 @@ namespace ECommerce.Controllers
                 List<Order> allOrders = _orderRepository.Find(x => x.UserId == userId, x => x.OrderDetails).ToList();
                 model.comments = comments;
                 model.orders = allOrders;
+
             }
             catch (Exception ex)
             {
