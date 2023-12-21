@@ -304,6 +304,70 @@ namespace ECommerce.Controllers
             return RedirectToAction("UserProfileHomePage" , "UserProfile");
         }
 
+        [HttpPost]
+        public IActionResult CancelOrder(int OrderId)
+        {
+            double moneyRefound = 0;
+            try
+            {
+                Order order = _orderRepository.GetById(OrderId, x => x.OrderDetails);
+                List<Entity.EntityClass.Basket> basketList = new List<Basket>();
+                foreach (var orderdetail in order.OrderDetails)
+                {
+                    Basket basketFromdb = basketRepository.GetById(orderdetail.BasketId, x => x.Cards);
+                    basketList.Add(basketFromdb);
+                    moneyRefound += basketFromdb.TotoalPrice;
+                }
+                foreach (var basket in basketList)
+                {
+                    foreach (Card cardFromdb in basket.Cards)
+                    {
+                        Book book = bookRepository.GetById(cardFromdb.BookId);
+                        book.StockCount += cardFromdb.BookCount;
+                    }
+                }
+                order.OrderStatus = Entity.Enum.OrderStatus.Canceled;
+                unitofwork.Commit();
+                _notyf.Success("Successfully canceled book order");
+            }
+            catch (Exception ex)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+            }
+            return RedirectToAction("List", "Order", new {area="Admin"});
+        }
+
+        [HttpPost]
+        public IActionResult BanOrder(int OrderId)
+        {
+            try
+            {
+                Order order = _orderRepository.GetById(OrderId, x => x.OrderDetails);
+                List<Entity.EntityClass.Basket> basketList = new List<Basket>();
+                foreach (var orderdetail in order.OrderDetails)
+                {
+                    Basket basketFromdb = basketRepository.GetById(orderdetail.BasketId, x => x.Cards);
+                    basketList.Add(basketFromdb);
+                }
+                foreach (var basket in basketList)
+                {
+                    foreach (Card cardFromdb in basket.Cards)
+                    {
+                        Book book = bookRepository.GetById(cardFromdb.BookId);
+                        book.StockCount += cardFromdb.BookCount;
+                    }
+                }
+                order.OrderStatus = Entity.Enum.OrderStatus.Banned;
+                unitofwork.Commit();
+                _notyf.Success("Successfully banned book order");
+            }
+            catch (Exception ex)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+            }
+            return RedirectToAction("List", "Order", new { area = "Admin" });
+        }
+
 
         // helper methods
         public static double CalculateTotalBookPrice(Book book, int BookCount)

@@ -43,11 +43,13 @@
                         </form>
                     }
 
-                    <form>
-                        <button class="btn btn-warning">Cancel</button>
+                    <form asp-action="CancelOrder" asp-controller="Purchase" asp-area="" method="post">
+                        <input type="hidden" value="@order.Id" name="OrderId" />
+                        <button class="btn btn-warning" type="submit">Cancel</button>
                     </form>
-                    <form>
-                        <button class="btn btn-danger">Ban</button>
+                    <form asp-action="BanOrder" asp-controller="Purchase" name="OrderId" asp-area="" method="post">
+                        <input type="hidden" value="@order.Id" name="OrderId" />
+                        <button class="btn btn-danger" type="submit">Ban</button>
                     </form>
             </td>
         </tr> 
