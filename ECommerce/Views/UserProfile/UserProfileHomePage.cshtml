@@ -1,1 +1,45 @@
-﻿user profiel home page 
+﻿@model UserProfileModel 
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/UserProfileHome.css"/>
+}
+<div class="_container_">
+    @{
+        string profileImgpath = Model.userProfile.ProfileImgPath == null ? Utility.SD.AnonimUserProfileImgPath : Model.userProfile.ProfileImgPath.Replace('\\', '/').Substring(1);
+    }
+    <div class="item user-data">
+        <img class="user-profile-img" src="@profileImgpath">
+        <div class="data-row">
+            UserName : @Model.userProfile.AppUser.UserName
+        </div>
+        <div class="data-row">
+            FirstName : @Model.userProfile.AppUser.FirstName
+        </div>
+        <div class="data-row">
+            LastName : @Model.userProfile.AppUser.LastName
+        </div>
+        <div class="data-row">
+            Email : @Model.userProfile.AppUser.Email
+        </div>
+    </div>
+    <div class="item">
+        <form method="post" asp-action="EditProfilePhoto" enctype="multipart/form-data">
+            <input value="@Model.userProfile.Id" name="userProfileId" hidden />
+            <label for="images" class="drop-container" id="dropcontainer">
+
+                <span class="drop-title">
+                    <h3>Edit Profile Image</h3>
+                    Drop files here
+                </span>
+                or
+                <input type="file" id="images" accept="image/png, image/jpg, image/jpeg" required name="file">
+                <button class="btn btn-success" type="submit">Submit</button>
+            </label>
+        </form>
+
+    </div>
+    <div class="item">
+    </div>
+    <div class="item">
+    </div>
+</div>

@@ -1,6 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Entity.EntityClass;
+using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interface;
 using Repository.UnitOfWork;
@@ -14,11 +16,15 @@ namespace ECommerce.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenericRepository<UserProfile> userProfileRepository;
         private readonly INotyfService _notyf;
-        public UserProfileController(IUnitOfWork unitOfWork, INotyfService _notyf)
+        private readonly IWebHostEnvironment _webhostenv;
+        private readonly UserManager<AppUser> _userManager;
+        public UserProfileController(IUnitOfWork unitOfWork, INotyfService _notyf , IWebHostEnvironment _webhostenv , UserManager<AppUser> _userManager)
         {
             this._notyf = _notyf;
             this._unitOfWork = unitOfWork;  
-            userProfileRepository = _unitOfWork.GetRepository<UserProfile>();
+            this.userProfileRepository = _unitOfWork.GetRepository<UserProfile>();
+            this._webhostenv = _webhostenv;
+            this._userManager = _userManager;
         }
         [HttpPost]
         public IActionResult CreateUserProfile()
@@ -44,8 +50,53 @@ namespace ECommerce.Controllers
         
         public IActionResult UserProfileHomePage()
         {
-            ;
-            return View();
+            UserProfileModel model = new UserProfileModel();
+            string userId = User.GetLoggedInUserId<string>();
+            try
+            {
+                UserProfile? userProfile = userProfileRepository.Find(x => x.AppUserId == userId , x => x.AppUser).FirstOrDefault();
+                if (userProfile == null)
+                {
+                    _notyf.Error(SD.SomethingWentWrong);
+                    return RedirectToAction("Index", "Home");
+                }
+                model.userProfile = userProfile;
+            }
+            catch (Exception ex)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfilePhoto(int userProfileId , IFormFile file)
+        {
+            try
+            {
+                if(file == null)
+                {
+                    _notyf.Error("Enter Profile Image to form");
+                    return RedirectToAction(nameof(UserProfileHomePage));
+                }
+                // folder name
+                UserProfile userProfile = userProfileRepository.GetById(userProfileId , x=>x.AppUser);
+                AppUser? user = await _userManager.FindByIdAsync(userProfile.AppUserId);
+
+                string folderName = $"{user.Id}_{user.FirstName}_{user.LastName}";
+
+                string path = UserProfileImgDownladHelper.SaveFile(file, folderName, _webhostenv);
+                userProfile.ProfileImgPath = path;
+                _unitOfWork.Commit();
+                _notyf.Success("Success");
+            }
+            catch (Exception ex)
+            {
+                _notyf.Error(SD.SomethingWentWrong);
+            }
+            return RedirectToAction(nameof(UserProfileHomePage));
         }
 
     }

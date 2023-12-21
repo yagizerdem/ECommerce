@@ -40,30 +40,8 @@
                         </li>
                         <li><a asp-action="LogOut" asp-controller="Auth">LogOut</a></li>
                     </ul>
-                    @if (ViewBag.userProfile == null)
-                    {
-                        if (User.Identity.IsAuthenticated)
-                        {
-                            <li style="list-style-type: none;">
-                                <form asp-action="CreateUserProfile" asp-controller="UserProfile" method="post">
-                                    <button type="submit" class="btn btn-success">Create user profile</button>
-                                </form>
-                            </li>
-                        }
-
-                    }else
-                    {
-                        UserProfile profile = ViewBag.userProfile;
-                        <li style="list-style-type: none;">
-                            <a asp-action="UserProfileHomePage" asp-controller="UserProfile">
-                                <img src="@(profile.ProfileImgPath == null ? Utility.SD.AnonimUserProfileImgPath :  profile.ProfileImgPath)"
-                                    style="width:50px; height:50px;border-radius:50%;"
-                                />
-                                &#160;
-                                @profile.AppUser.UserName
-                            </a>
-                        </li>
-                    }
+                    @*Profile view componet here *@
+                    @await Component.InvokeAsync("UserProfile")
                 </div>
 
             </div>
