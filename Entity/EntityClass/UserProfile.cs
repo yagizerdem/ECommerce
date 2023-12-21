@@ -13,6 +13,8 @@ namespace Entity.EntityClass
         
         public string? ProfileImgPath { get; set; }
 
+        public double Wallet {  get; set; }
 
+        
     }
 }

@@ -5,6 +5,7 @@ using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Newtonsoft.Json;
 using NuGet.ContentModel;
 using Repository.Interface;
@@ -28,6 +29,7 @@ namespace ECommerce.Controllers
         private readonly IGenericRepository<Basket> basketRepository;
         private readonly IGenericRepository<Book> bookRepository;
         private readonly IGenericRepository<Order> _orderRepository;
+        private readonly IGenericRepository<UserProfile> _userProfileRepository;
         public PurchaseController(
             UserManager<AppUser> _userManager, IMapper mapper,
             SignInManager<AppUser> signInManager, INotyfService _notyf,
@@ -44,6 +46,7 @@ namespace ECommerce.Controllers
             this.bookRepository = unitofwork.GetRepository<Book>();
             this.env = env;
             this._orderRepository = unitofwork.GetRepository<Order>();
+            this._userProfileRepository = unitofwork.GetRepository<UserProfile>();
         }
         [HttpPost]
         public async Task<IActionResult> AddToBasket([FromBody] PurchaseRequestModel purchaseRequest)
@@ -294,6 +297,10 @@ namespace ECommerce.Controllers
                     }
                 }
                 order.OrderStatus = Entity.Enum.OrderStatus.Refound;
+                // refound mone 
+                string UserId = User.GetLoggedInUserId<string>();
+                UserProfile profile = _userProfileRepository.Find(x => x.AppUserId == UserId).First();
+                profile.Wallet += moneyRefound;
                 unitofwork.Commit();
                 _notyf.Success("Successfully refound book");
             }
@@ -305,7 +312,7 @@ namespace ECommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult CancelOrder(int OrderId)
+        public  async Task<IActionResult> CancelOrder(int OrderId)
         {
             double moneyRefound = 0;
             try
@@ -327,6 +334,11 @@ namespace ECommerce.Controllers
                     }
                 }
                 order.OrderStatus = Entity.Enum.OrderStatus.Canceled;
+                // refound mone 
+                string UserId = User.GetLoggedInUserId<string>();
+                UserProfile profile = _userProfileRepository.Find(x => x.AppUserId == UserId).First();
+                profile.Wallet += moneyRefound;
+
                 unitofwork.Commit();
                 _notyf.Success("Successfully canceled book order");
             }
